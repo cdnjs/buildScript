@@ -3,6 +3,8 @@ buildScript
 
 Script use to rebuild the meta data of [api](https://github.com/cdnjs/cdnjs#api) and [website](https://cdnjs.com/), and then deploy them.
 
+Take a look at the script, set the path and api key before use it.
+
 ## Repositories
 * **cdnjs**, the main repo we are working on
 * **cdnjsmaster**, the clean repo be used to build
