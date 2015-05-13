@@ -14,8 +14,14 @@ Take a look at the script, set the path and api key before use it.
 
 ### Branches
 * **cdnjsmaster** should stay on master, this repo is setup for build process only.
-* **new-website** should have two branches, one is **master**, for the real codes, another one will be **meta**, **meta** beanch will save additional meta data the we'll use for website and api, but not real codes.
+* **new-website** should have two branches
+  * one is **master**, for the real codes
+  * another one will be **meta**, **meta** beanch will save additional meta data the we'll use for website and api, but not real codes.
 
 ### Remotes
- * **cdnjsmaster** should have a **local** remote, which will points to **cdnjs**, we want the most objects will be fetched locally.
- * **new-website** should have 3 remotes, **origin** will point to the repo on GitHub, and the others will be **heroku** and **heroku2**, which will point to the api and website project on heroku.
+ * **cdnjsmaster** should have two remotes,
+   * **origin** will point to the repo on GitHub
+   * **local** will points to the local working **cdnjs**, we want the most objects will be fetched locally.
+ * **new-website** should have 3 remotes,
+   * **origin** will point to the repo on GitHub
+   * the others will be **heroku** and **heroku2**, which will point to the api and website project on heroku.
