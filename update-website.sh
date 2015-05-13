@@ -15,9 +15,11 @@ if [ "$hasLocalRepo" = true ]; then
     git fetch local
 fi
 
+echo "Pull cdnjs main repo with rebase from origin(GitHub)"
 status=`git pull --rebase origin master`
+
 if [ "$status" = "Current branch master is up to date." ]; then
-    echo "Up to date, no need to rebuild";
+    echo "Cdnjs main reop is up to date, no need to rebuild";
 else
     echo "Rebuild meta data phase 1"
     git -C $basePath/$webRepo checkout meta
@@ -27,27 +29,33 @@ else
     cd $basePath/$webRepo
     node update.js
 
-    echo "Commit change"
+    echo "Commit meta data upadte in website repo"
     git -C $basePath/$webRepo --amend --no-edit
 
     update=true
 fi
 
+echo "Change directory into website repo and checkout to master branch"
 cd $basePath/$webRepo
 git checkout master
 
+echo "Pull website repo with rebase from origin(Repo)"
 webstatus=`git -C $basePath/$webRepo pull --rebase`
 if [ "$webstatus" = "Current branch master is up to date." ]; then
-    echo "master branch up to date, no need to update meta branch"
+    echo "Website master branch up to date, no need to update meta branch"
 else
-    echo "Rebase meta branch on master"
+    echo "Rebase website's meta branch on master"
     git rebase master meta
     update=true
 fi
 
 if [ "$update" = true ]; then
+    echo "Now push and reploy website"
     git push origin meta -f
     git push heroku2 meta:master -f
     git push heroku meta:master -f
+    echo "Now rebuild algolia search index"
     GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js
+else
+    echo "Didn't update anything, no need to push or deploy."
 fi
