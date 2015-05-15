@@ -30,7 +30,7 @@ else
     node update.js
 
     echo "Commit meta data upadte in website repo"
-    git -C $basePath/$webRepo --amend --no-edit
+    git -C $basePath/$webRepo commit --amend --no-edit
 
     update=true
 fi
