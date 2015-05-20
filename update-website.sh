@@ -31,7 +31,7 @@ else
 
     echo "Commit meta data upadte in website repo"
     git -C $basePath/$webRepo add --all
-    git -C $basePath/$webRepo commit --amend --no-edit
+    git -C $basePath/$webRepo commit --message="meta data"
 
     update=true
 fi
