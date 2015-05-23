@@ -5,8 +5,8 @@ mainRepo="cdnjsmaster"
 webRepo="new-website"
 hasLocalRepo=true
 update=false
-githubToken=
-algoliaToken=
+githubToken=""
+algoliaToken=""
 
 cd "$basePath/$mainRepo"
 
