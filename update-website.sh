@@ -56,6 +56,7 @@ if [ "$update" = true ]; then
     git push heroku2 meta:master -f
     git push heroku meta:master -f
     echo "Now rebuild algolia search index"
+    git checkout meta
     GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js
 else
     echo "Didn't update anything, no need to push or deploy."
