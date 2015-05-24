@@ -41,7 +41,7 @@ cd $basePath/$webRepo
 git checkout master
 
 echo "Pull website repo with rebase from origin(Repo)"
-webstatus=`git -C $basePath/$webRepo pull --rebase`
+webstatus=`git pull --rebase`
 if [ "$webstatus" = "Current branch master is up to date." ]; then
     echo "Website master branch up to date, no need to update meta branch"
 else
