@@ -4,7 +4,8 @@ basePath="/home/user/cdnjs"
 mainRepo="cdnjsmaster"
 webRepo="new-website"
 hasLocalRepo=true
-update=false
+updateMeta=false
+updateRepoo=false
 githubToken=""
 algoliaToken=""
 
@@ -33,7 +34,7 @@ else
     git -C $basePath/$webRepo add --all
     git -C $basePath/$webRepo commit --message="meta data"
 
-    update=true
+    updateMeta=true
 fi
 
 echo "Change directory into website repo and checkout to master branch"
@@ -47,17 +48,20 @@ if [ "$webstatus" = "Current branch master is up to date." ]; then
 else
     echo "Rebase website's meta branch on master"
     git rebase master meta
-    update=true
+    updateRepo=true
 fi
 
-if [ "$update" = true ]; then
-    echo "Now push and reploy website"
+if [ "$updateMeta" = true ]; then
+    echo "Now push and reploy website & api"
     git push origin meta -f
-    git push heroku2 meta:master -f
     git push heroku meta:master -f
+    git push heroku2 meta:master -f
     echo "Now rebuild algolia search index"
     git checkout meta
     GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js
+elif [ "$updateRepo" = true ]; then
+    echo "Now push and reploy website only, no need to deploy api due to meta data no update"
+    git push heroku meta:master -f
 else
     echo "Didn't update anything, no need to push or deploy."
 fi
