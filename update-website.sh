@@ -45,24 +45,24 @@ status=`git pull --rebase origin master`
 
 if [ "$status" = "Current branch master is up to date." ]; then
     msg="Cdnjs main reop is up to date, no need to rebuild";
-    Cyan $msg
-    gitter $msg
+    Cyan "$msg"
+    gitter "$msg"
 else
     msg="Rebuild meta data phase 1"
-    Green $msg
-    gitter $msg
+    Green "$msg"
+    gitter "$msg"
     git -C $basePath/$webRepo checkout meta || Red "Error"
     node build/packages.json.js || Red "Error"
 
     msg="Rebuild meta data phase 2"
-    Green $msg
-    gitter $msg
+    Green "$msg"
+    gitter "$msg"
     cd $basePath/$webRepo || Red "Error"
     node update.js || Red "Error"
 
     msg="Commit meta data update in website repo"
-    Green $msg
-    gitter $msg
+    Green "$msg"
+    gitter "$msg"
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
         git -C $basePath/$webRepo add public/$file || Red "Error"
@@ -88,34 +88,34 @@ fi
 
 if [ "$updateMeta" = true ]; then
     msg="Now push and deploy website & api"
-    Green $msg
-    gitter $msg
+    Green "$msg"
+    gitter "$msg"
     git push origin meta -f || Red "Error"
     for remote in heroku heroku2
     do
         git push $remote meta:master -f
         if [ ! $? -eq 0 ]; then
             msg="Failed deployment on $remote ..."
-            Red $msg
-            gitter $msg
+            Red "$msg"
+            gitter "$msg"
         fi
     done
     git checkout meta || Red "Error"
     if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
-        Green $msg
-        gitter $msg
+        Green "$msg"
+        gitter "$msg"
         GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || Red "Error"
     else
         Red "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website only, no need to deploy api due to meta data no update"
-    Green $msg
-    gitter $msg
+    Green "$msg"
+    gitter "$msg"
     git push heroku meta:master -f || Red "Error"
 else
     msg="Didn't update anything, no need to push or deploy."
-    Cyan $msg
-    gitter $msg
+    Cyan "$msg"
+    gitter "$msg"
 fi
