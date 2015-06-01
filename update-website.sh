@@ -1,13 +1,14 @@
 #!/bin/sh
 
+githubToken=""
+algoliaToken=""
+
 basePath="/home/user/cdnjs"
 mainRepo="cdnjsmaster"
 webRepo="new-website"
 hasLocalRepo=true
 updateMeta=false
 updateRepoo=false
-githubToken=""
-algoliaToken=""
 
 cd "$basePath/$mainRepo"
 
