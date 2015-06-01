@@ -79,7 +79,9 @@ git checkout master || Red "Error"
 Cyan "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
 if [ "$webstatus" = "Current branch master is up to date." ]; then
-    Cyan "Website master branch up to date, no need to update meta branch"
+    msg="Website master branch up to date, no need to update meta branch"
+    Cyan "$msg"
+    gitter "$msg"
 else
     Green "Rebase website's meta branch on master"
     git rebase master meta || Red "Error"
