@@ -10,9 +10,17 @@ hasLocalRepo=true
 updateMeta=false
 updateRepoo=false
 
+if [ ! -d "$basePath/$mainRepo" ]; then
+    exit
+fi
+
+if [ ! -d "$basePath/$webRepo" ]; then
+    exit
+fi
+
 cd "$basePath/$mainRepo"
 
-if [ "$hasLocalRepo" = true ]; then
+if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     echo "Exist cdnjs local repo, fetch objects from local branch first"
     git fetch local
 fi
