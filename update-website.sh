@@ -26,7 +26,7 @@ if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     echo "Exist cdnjs local repo, fetch objects from local branch first"
     git fetch local
 else
-    "Local repo not found, will grab object(s) from GitHub"
+    echo "Local repo not found, will grab object(s) from GitHub"
 fi
 
 echo "Pull cdnjs main repo with rebase from origin(GitHub)"
