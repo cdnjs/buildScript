@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 githubToken=""
 algoliaToken=""
@@ -10,40 +10,43 @@ hasLocalRepo=true
 updateMeta=false
 updateRepoo=false
 
+pth="$(dirname $(readlink -f $0))"
+. "$pth/colorOutput.sh"
+
 if [ ! -d "$basePath/$mainRepo" ]; then
-    echo "Main repo not found, exit now."
+    Red "Main repo not found, exit now."
     exit
 fi
 
 if [ ! -d "$basePath/$webRepo" ]; then
-    echo "website repo not found, exit now."
+    Red "website repo not found, exit now."
     exit
 fi
 
 cd "$basePath/$mainRepo"
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
-    echo "Exist cdnjs local repo, fetch objects from local branch first"
+    Green "Exist cdnjs local repo, fetch objects from local branch first"
     git fetch local
 else
-    echo "Local repo not found, will grab object(s) from GitHub"
+    Cyan "Local repo not found, will grab object(s) from GitHub"
 fi
 
-echo "Pull cdnjs main repo with rebase from origin(GitHub)"
+Cyan "Pull cdnjs main repo with rebase from origin(GitHub)"
 status=`git pull --rebase origin master`
 
 if [ "$status" = "Current branch master is up to date." ]; then
-    echo "Cdnjs main reop is up to date, no need to rebuild";
+    Cyan "Cdnjs main reop is up to date, no need to rebuild";
 else
-    echo "Rebuild meta data phase 1"
+    Green "Rebuild meta data phase 1"
     git -C $basePath/$webRepo checkout meta
     node build/packages.json.js
 
-    echo "Rebuild meta data phase 2"
+    Green "Rebuild meta data phase 2"
     cd $basePath/$webRepo
     node update.js
 
-    echo "Commit meta data update in website repo"
+    Green "Commit meta data update in website repo"
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
         git -C $basePath/$webRepo add public/$file
@@ -53,35 +56,35 @@ else
     updateMeta=true
 fi
 
-echo "Change directory into website repo and checkout to master branch"
+Cyan "Change directory into website repo and checkout to master branch"
 cd $basePath/$webRepo
 git checkout master
 
-echo "Pull website repo with rebase from origin(Repo)"
+Cyan "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
 if [ "$webstatus" = "Current branch master is up to date." ]; then
-    echo "Website master branch up to date, no need to update meta branch"
+    Cyan "Website master branch up to date, no need to update meta branch"
 else
-    echo "Rebase website's meta branch on master"
+    Green "Rebase website's meta branch on master"
     git rebase master meta
     updateRepo=true
 fi
 
 if [ "$updateMeta" = true ]; then
-    echo "Now push and reploy website & api"
+    Green "Now push and reploy website & api"
     git push origin meta -f
     git push heroku meta:master -f
     git push heroku2 meta:master -f
-    echo "Now rebuild algolia search index"
+    Green "Now rebuild algolia search index"
     git checkout meta
     if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
         GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js
     else
-        echo "Missing GitHub or algolia api key, cannot rebuild the searching index"
+        Red "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
-    echo "Now push and reploy website only, no need to deploy api due to meta data no update"
+    Green "Now push and reploy website only, no need to deploy api due to meta data no update"
     git push heroku meta:master -f
 else
-    echo "Didn't update anything, no need to push or deploy."
+    Cyan "Didn't update anything, no need to push or deploy."
 fi
