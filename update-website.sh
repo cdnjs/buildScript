@@ -2,6 +2,7 @@
 
 githubToken=""
 algoliaToken=""
+gitterHook=""
 
 basePath="/home/user/cdnjs"
 mainRepo="cdnjsmaster"
@@ -25,6 +26,13 @@ fi
 
 cd "$basePath/$mainRepo"
 
+function gitter()
+{
+    curl -d message="$1" "$gitterHook"
+}
+
+gitter "Start building process on PeterDaveHello's server ..."
+
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     Green "Exist cdnjs local repo, fetch objects from local branch first"
     git fetch local || Red "Error"
@@ -36,17 +44,25 @@ Cyan "Pull cdnjs main repo with rebase from origin(GitHub)"
 status=`git pull --rebase origin master`
 
 if [ "$status" = "Current branch master is up to date." ]; then
-    Cyan "Cdnjs main reop is up to date, no need to rebuild";
+    msg="Cdnjs main reop is up to date, no need to rebuild";
+    Cyan $msg
+    gitter $msg
 else
-    Green "Rebuild meta data phase 1"
+    msg="Rebuild meta data phase 1"
+    Green $msg
+    gitter $msg
     git -C $basePath/$webRepo checkout meta || Red "Error"
     node build/packages.json.js || Red "Error"
 
-    Green "Rebuild meta data phase 2"
+    msg="Rebuild meta data phase 2"
+    Green $msg
+    gitter $msg
     cd $basePath/$webRepo || Red "Error"
     node update.js || Red "Error"
 
-    Green "Commit meta data update in website repo"
+    msg="Commit meta data update in website repo"
+    Green $msg
+    gitter $msg
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
         git -C $basePath/$webRepo add public/$file || Red "Error"
@@ -71,16 +87,22 @@ else
 fi
 
 if [ "$updateMeta" = true ]; then
-    Green "Now push and deploy website & api"
+    msg="Now push and deploy website & api"
+    Green $msg
+    gitter $msg
     git push origin meta -f || Red "Error"
     for remote in heroku heroku2
     do
         git push $remote meta:master -f
         if [ ! $? -eq 0 ]; then
-            Red "Failed deployment on $remote ..."
+            msg="Failed deployment on $remote ..."
+            Red $msg
+            gitter $msg
         fi
     done
-    Green "Now rebuild algolia search index"
+    msg="Now rebuild algolia search index"
+    Green $msg
+    gitter $msg
     git checkout meta || Red "Error"
     if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
         GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || Red "Error"
@@ -88,8 +110,12 @@ if [ "$updateMeta" = true ]; then
         Red "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
-    Green "Now push and deploy website only, no need to deploy api due to meta data no update"
+    msg="Now push and deploy website only, no need to deploy api due to meta data no update"
+    Green $msg
+    gitter $msg
     git push heroku meta:master -f || Red "Error"
 else
-    Cyan "Didn't update anything, no need to push or deploy."
+    msg="Didn't update anything, no need to push or deploy."
+    Cyan $msg
+    gitter $msg
 fi
