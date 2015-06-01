@@ -9,7 +9,7 @@ mainRepo="cdnjsmaster"
 webRepo="new-website"
 hasLocalRepo=true
 updateMeta=false
-updateRepoo=false
+updateRepo=false
 
 pth="$(dirname $(readlink -f $0))"
 . "$pth/colorOutput.sh"
