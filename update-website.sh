@@ -28,7 +28,7 @@ cd "$basePath/$mainRepo"
 
 function gitter()
 {
-    curl --silent -d message="[cronjob] $1" "$gitterHook"
+    curl --silent -d message="[cronjob] $1" "$gitterHook" > /dev/null
 }
 
 gitter "Start website/api/index building process on PeterDaveHello's server ..."
