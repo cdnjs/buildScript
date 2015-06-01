@@ -31,7 +31,7 @@ function gitter()
     curl --silent -d message="$1" "$gitterHook"
 }
 
-gitter "Start building process on PeterDaveHello's server ..."
+gitter "Start website/api/index building process on PeterDaveHello's server ..."
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     Green "Exist cdnjs local repo, fetch objects from local branch first"
