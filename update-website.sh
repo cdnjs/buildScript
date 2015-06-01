@@ -73,8 +73,13 @@ fi
 if [ "$updateMeta" = true ]; then
     Green "Now push and deploy website & api"
     git push origin meta -f
-    git push heroku meta:master -f
-    git push heroku2 meta:master -f
+    for remote in heroku heroku2
+    do
+        git push $remote meta:master -f
+        if [ ! $? -eq 0 ]; then
+            Red "Failed deployment on $remote ..."
+        fi
+    done
     Green "Now rebuild algolia search index"
     git checkout meta
     if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
