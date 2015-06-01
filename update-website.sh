@@ -100,11 +100,11 @@ if [ "$updateMeta" = true ]; then
             gitter $msg
         fi
     done
-    msg="Now rebuild algolia search index"
-    Green $msg
-    gitter $msg
     git checkout meta || Red "Error"
     if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
+        msg="Now rebuild algolia search index"
+        Green $msg
+        gitter $msg
         GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || Red "Error"
     else
         Red "Missing GitHub or algolia api key, cannot rebuild the searching index"
