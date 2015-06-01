@@ -31,7 +31,10 @@ else
     node update.js
 
     echo "Commit meta data update in website repo"
-    git -C $basePath/$webRepo add --all
+    for file in atom.xml packages.min.json rss.xml sitemap.xml
+    do
+        git -C $basePath/$webRepo add public/$file
+    done
     git -C $basePath/$webRepo commit --message="meta data"
 
     updateMeta=true
