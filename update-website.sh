@@ -28,7 +28,7 @@ cd "$basePath/$mainRepo"
 
 function gitter()
 {
-    curl -d message="$1" "$gitterHook"
+    curl --silent -d message="$1" "$gitterHook"
 }
 
 gitter "Start building process on PeterDaveHello's server ..."
