@@ -71,7 +71,7 @@ else
 fi
 
 if [ "$updateMeta" = true ]; then
-    Green "Now push and reploy website & api"
+    Green "Now push and deploy website & api"
     git push origin meta -f
     git push heroku meta:master -f
     git push heroku2 meta:master -f
@@ -83,7 +83,7 @@ if [ "$updateMeta" = true ]; then
         Red "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
-    Green "Now push and reploy website only, no need to deploy api due to meta data no update"
+    Green "Now push and deploy website only, no need to deploy api due to meta data no update"
     git push heroku meta:master -f
 else
     Cyan "Didn't update anything, no need to push or deploy."
