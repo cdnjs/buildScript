@@ -123,3 +123,7 @@ else
     Cyan "$msg"
     gitter "$msg"
 fi
+
+msg="Update finished."
+Cyan "$msg"
+gitter "$msg"
