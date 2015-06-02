@@ -92,7 +92,6 @@ if [ "$updateMeta" = true ]; then
     msg="Now push and deploy website & api"
     Green "$msg"
     gitter "$msg"
-    git push origin meta -f || Red "Error"
     for remote in heroku heroku2
     do
         git push $remote meta:master -f
@@ -102,6 +101,7 @@ if [ "$updateMeta" = true ]; then
             gitter "$msg"
         fi
     done
+    git push origin meta -f || Red "Error"
     git checkout meta || Red "Error"
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
