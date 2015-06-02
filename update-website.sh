@@ -103,7 +103,7 @@ if [ "$updateMeta" = true ]; then
         fi
     done
     git checkout meta || Red "Error"
-    if [ -z "$githubToken" ] || [ -z "$algoliaToken" ]; then
+    if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
         Green "$msg"
         gitter "$msg"
