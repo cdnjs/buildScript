@@ -83,7 +83,9 @@ if [ "$webstatus" = "Current branch master is up to date." ]; then
     Cyan "$msg"
     gitter "$msg"
 else
-    Green "Rebase website's meta branch on master"
+    msg="Rebase website's meta branch on master"
+    Green "$msg"
+    gitter "$msg"
     git rebase master meta || Red "Error"
     updateRepo=true
 fi
