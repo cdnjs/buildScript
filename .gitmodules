@@ -1,0 +1,3 @@
+[submodule "colorEcho"]
+	path = colorEcho
+	url = https://github.com/PeterDaveHello/ColorEchoForShell.git
