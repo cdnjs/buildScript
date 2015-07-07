@@ -12,7 +12,7 @@ updateMeta=false
 updateRepo=false
 
 pth="$(dirname $(readlink -f $0))"
-. "$pth/colorEcho/dist/colorEcho.sh"
+. "$pth/colorEcho/dist/ColorEcho.bash"
 
 if [ ! -d "$basePath/$mainRepo" ]; then
     echo.Red "Main repo not found, exit now."
