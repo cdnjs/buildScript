@@ -9,12 +9,12 @@ pth="$(dirname $(readlink -f $0))"
 
 if [ ! -d "$basePath/$mainRepo" ]; then
     echo.Red "Main repo not found, exit now."
-    exit
+    exit 1
 fi
 
 if [ ! -d "$basePath/$webRepo" ]; then
     echo.Red "website repo not found, exit now."
-    exit
+    exit 1
 fi
 
 cd "$basePath/$mainRepo"
