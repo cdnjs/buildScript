@@ -2,16 +2,7 @@
 
 set -e
 
-githubToken=""
-algoliaToken=""
-gitterHook=""
-
-basePath="/home/user/cdnjs"
-mainRepo="cdnjsmaster"
-webRepo="new-website"
-hasLocalRepo=true
-updateMeta=false
-updateRepo=false
+. config.sh
 
 pth="$(dirname $(readlink -f $0))"
 . "$pth/colorEcho/dist/ColorEcho.bash"
