@@ -48,6 +48,9 @@ if [ "$status" = "Current branch master is up to date." ]; then
     echo.Cyan "$msg"
     gitter "$msg"
 else
+    msg="Make sure npm package dependencies, do npm install"
+    echo.Green "$msg"
+    npm install
     msg="Rebuild meta data phase 1"
     echo.Green "$msg"
     gitter "$msg"
@@ -83,6 +86,9 @@ if [ "$webstatus" = "Current branch master is up to date." ]; then
     echo.Cyan "$msg"
     gitter "$msg"
 else
+    msg="Make sure npm package dependencies, do npm install"
+    echo.Green "$msg"
+    npm install
     msg="Rebase website's meta branch on master"
     echo.Green "$msg"
     gitter "$msg"
