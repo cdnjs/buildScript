@@ -4,11 +4,14 @@ set -e
 
 . config.sh
 
+rm $logFile
+
 pth="$(dirname $(readlink -f $0))"
 . "$pth/colorEcho/dist/ColorEcho.bash"
 
 function output()
 {
+    echo "[$1] $2" >> $logFile
     case "$1" in
         "Warn" )
             echo.Red "$2"

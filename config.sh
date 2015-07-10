@@ -9,3 +9,4 @@ hasLocalRepo=true
 updateMeta=false
 updateRepo=false
 
+logFile='build.log'
