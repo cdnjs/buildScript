@@ -43,6 +43,7 @@ if [ "$status" = "Current branch master is up to date." ]; then
 else
     msg="Make sure npm package dependencies, do npm install"
     echo.Green "$msg"
+    gitter "$msg"
     npm install
     msg="Rebuild meta data phase 1"
     echo.Green "$msg"
