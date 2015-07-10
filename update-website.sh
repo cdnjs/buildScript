@@ -6,7 +6,7 @@ pth="$(dirname $(readlink -f $0))"
 
 . "$pth/config.sh"
 
-rm $logFile
+rm -f $logFile
 
 . "$pth/colorEcho/dist/ColorEcho.bash"
 
