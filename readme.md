@@ -3,7 +3,9 @@ buildScript
 
 Script use to rebuild the meta data of [api](https://github.com/cdnjs/cdnjs#api) and [website](https://cdnjs.com/), and then deploy them.
 
-Take a look at the script, set the path and api key before use it.
+Most of the codes will be in `update-website.sh`, `build.sh` is the file we need to execute, and `config.sh` is the file contains the configs.
+
+Take a look at the script, set the path and api key in `config.sh` before use it.
 
 ## Repositories
 * **cdnjs**, the main repo we are working on
