@@ -12,4 +12,4 @@ IssueContent="`sed ':a;N;$!ba;s/\n/\\\n/g' $pth/issueTemplate`"
 
 Issue="{ \"title\": \"$IssueTitle\", \"body\": \"$IssueContent\", \"assignee\": \"$IssueAssignee\", \"labels\": $IssueLabels }"
 
-"$pth/update-website.sh" || curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+"$pth/update-website.sh" > /dev/null || curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
