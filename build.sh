@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Sciprt for cronjob, will open an issue on cdnjs/cdnjs if build failed.
+
 pth="$(dirname $(readlink -f $0))"
 . "$pth/config.sh"
 
