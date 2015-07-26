@@ -124,6 +124,7 @@ elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website only, no need to deploy api due to meta data no update"
     output Success "$msg" gitter
     git push heroku meta:master -f || output Warn "Error" gitter
+    git push origin meta -f || output Warn "Error" gitter
 else
     msg="Didn't update anything, no need to push or deploy."
     output Info "$msg" gitter
