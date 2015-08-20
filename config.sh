@@ -9,4 +9,6 @@ hasLocalRepo=true
 updateMeta=false
 updateRepo=false
 
+pushMetaOnGitHub=false
+
 logFile='build.log'
