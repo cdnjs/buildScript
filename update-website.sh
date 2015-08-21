@@ -111,7 +111,9 @@ if [ "$updateMeta" = true ]; then
             output Warn "$msg" gitter
         fi
     done
-    git push origin meta -f || output Warn "Error" gitter
+    if [ "$pushMetaOnGitHub" = true ]; then
+        git push origin meta -f || output Warn "Error" gitter
+    fi
     git checkout meta || output Warn "Error" gitter
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
