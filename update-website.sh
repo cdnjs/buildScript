@@ -114,10 +114,10 @@ if [ "$updateMeta" = true ]; then
     if [ "$pushMetaOnGitHub" = true ]; then
         git push origin meta -f || output Warn "Error" gitter
     fi
-    git checkout meta || output Warn "Error" gitter
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
         output Success "$msg" gitter
+        git checkout meta || output Warn "Error" gitter
         GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || output Warn "Error" gitter
     else
         output Warn "Missing GitHub or algolia api key, cannot rebuild the searching index"
