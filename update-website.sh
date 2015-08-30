@@ -29,14 +29,23 @@ function output()
     fi
 }
 
-if [ ! -d "$basePath/$mainRepo" ]; then
-    output Warn "Main repo not found, exit now." gitter
+function error()
+{
+    if [ "$#" = "0" ]; then
+        MSG="Error"
+    else
+        MSG="$@";
+    fi
+    output Warn "$MSG" gitter
     exit 1
+}
+
+if [ ! -d "$basePath/$mainRepo" ]; then
+    error "Main repo not found, exit now."
 fi
 
 if [ ! -d "$basePath/$webRepo" ]; then
-    output Warn "website repo not found, exit now." gitter
-    exit 1
+    error "website repo not found, exit now."
 fi
 
 cd "$basePath/$mainRepo"
@@ -45,7 +54,7 @@ output Info "Start website/api/index building process on PeterDaveHello's server
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     output Success "Exist cdnjs local repo, fetch objects from local branch first"
-    git fetch local || output Warn "Error" gitter
+    git fetch local || error
 else
     output Info "Local repo not found, will grab object(s) from GitHub"
 fi
@@ -62,28 +71,28 @@ else
     npm install
     msg="Rebuild meta data phase 1"
     output Success "$msg" gitter
-    git -C $basePath/$webRepo checkout meta || output Warn "Error" gitter
-    node build/packages.json.js || output Warn "Error" gitter
+    git -C $basePath/$webRepo checkout meta || error
+    node build/packages.json.js || error
 
     msg="Rebuild meta data phase 2"
     output Success "$msg" gitter
-    cd $basePath/$webRepo || output Warn "Error" gitter
-    node update.js || output Warn "Error" gitter
+    cd $basePath/$webRepo || error
+    node update.js || error
 
     msg="Commit meta data update in website repo"
     output Success "$msg" gitter
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
-        git -C $basePath/$webRepo add public/$file || output Warn "Error" gitter
+        git -C $basePath/$webRepo add public/$file || error
     done
-    git -C $basePath/$webRepo commit --message="meta data" || output Warn "Error" gitter
+    git -C $basePath/$webRepo commit --message="meta data" || error
 
     updateMeta=true
 fi
 
 output Info "Change directory into website repo and checkout to master branch"
 cd $basePath/$webRepo
-git checkout master || output Warn "Error" gitter
+git checkout master || error
 
 output Info "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
@@ -96,7 +105,7 @@ else
     npm install
     msg="Rebase website's meta branch on master"
     output Success "$msg" gitter
-    git rebase master meta || output Warn "Error" gitter
+    git rebase master meta || error
     updateRepo=true
 fi
 
@@ -105,29 +114,25 @@ if [ "$updateMeta" = true ]; then
     output Success "$msg" gitter
     for remote in heroku heroku2
     do
-        git push $remote meta:master -f
-        if [ ! $? -eq 0 ]; then
-            msg="Failed deployment on $remote ..."
-            output Warn "$msg" gitter
-        fi
+        git push $remote meta:master -f || error "Failed deployment on $remote ..."
     done
     if [ "$pushMetaOnGitHub" = true ]; then
-        git push origin meta -f || output Warn "Error" gitter
+        git push origin meta -f || error
     fi
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
         output Success "$msg" gitter
-        git checkout meta || output Warn "Error" gitter
-        GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || output Warn "Error" gitter
+        git checkout meta || error
+        GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || error
     else
-        output Warn "Missing GitHub or algolia api key, cannot rebuild the searching index"
+        error "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website only, no need to deploy api due to meta data no update"
     output Success "$msg" gitter
-    git push heroku meta:master -f || output Warn "Error" gitter
+    git push heroku meta:master -f || error
     if [ "$pushMetaOnGitHub" = true ]; then
-        git push origin meta -f || output Warn "Error" gitter
+        git push origin meta -f || error
     fi
 else
     msg="Didn't update anything, no need to push or deploy."
