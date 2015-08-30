@@ -12,7 +12,7 @@ rm -f $pth/$logFile
 
 function output()
 {
-    echo "[$1] $2" >> $pth/$logFile
+    echo "`date` [$1] $2" >> $pth/$logFile
     case "$1" in
         "Warn" )
             echo.Red "$2"
