@@ -6,15 +6,20 @@ pth="$(dirname $(readlink -f $0))"
 
 . "$pth/config.sh"
 
+eval logPath=$logPath
+if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
+    logPath=$pth
+fi
+
 if [ "$logMode" = "clean" ]; then
-    rm -f $pth/$logFile
+    rm -f $logPath/$logFile
 fi
 
 . "$pth/colorEcho/dist/ColorEcho.bash"
 
 function output()
 {
-    echo "`date` [$1] $2" >> $pth/$logFile
+    echo "`date` [$1] $2" >> $logPath/$logFile
     case "$1" in
         "Warn" )
             echo.Red "$2"
