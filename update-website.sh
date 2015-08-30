@@ -73,7 +73,7 @@ if [ "$status" = "Current branch master is up to date." ]; then
 else
     msg="Make sure npm package dependencies, do npm install"
     output Success "$msg"
-    npm install
+    run npm install
     msg="Rebuild meta data phase 1"
     output Success "$msg" gitter
     run git -C $basePath/$webRepo checkout meta
@@ -107,7 +107,7 @@ if [ "$webstatus" = "Current branch master is up to date." ]; then
 else
     msg="Make sure npm package dependencies, do npm install"
     output Success "$msg" gitter
-    npm install
+    run npm install
     msg="Rebase website's meta branch on master"
     output Success "$msg" gitter
     run git rebase master meta
