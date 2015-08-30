@@ -159,4 +159,4 @@ else
 fi
 
 msg="Update finished."
-output Info "$msg" gitter
+output Success "$msg" gitter
