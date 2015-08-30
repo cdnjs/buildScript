@@ -81,6 +81,9 @@ else
     msg="Make sure npm package dependencies, do npm install"
     output Success "$msg"
     run npm install
+    msg="Run npm test before building the meta data/artifacts"
+    output Success "$msg"
+    run npm test
     msg="Rebuild meta data phase 1"
     output Success "$msg" gitter
     run git -C $basePath/$webRepo checkout meta
