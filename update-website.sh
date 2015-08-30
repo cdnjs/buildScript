@@ -25,7 +25,7 @@ function output()
         ;;
     esac
     if [ ! -z "$3" ] && [ "$3" = "gitter" ]; then
-        curl --silent -d message="[cronjob] $2" "$gitterHook"
+        curl --silent -d message="[cronjob] $2" "$gitterHook" || output Warn "Error on curl!!! Message may not be posted on our gitter chatroom"
     fi
 }
 
