@@ -40,6 +40,11 @@ function error()
     exit 1
 }
 
+function run()
+{
+    "$@" || error "Got error while running command: '$@'"
+}
+
 if [ ! -d "$basePath/$mainRepo" ]; then
     error "Main repo not found, exit now."
 fi
@@ -54,7 +59,7 @@ output Info "Start website/api/index building process on PeterDaveHello's server
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     output Success "Exist cdnjs local repo, fetch objects from local branch first"
-    git fetch local || error
+    run git fetch local
 else
     output Info "Local repo not found, will grab object(s) from GitHub"
 fi
@@ -71,28 +76,28 @@ else
     npm install
     msg="Rebuild meta data phase 1"
     output Success "$msg" gitter
-    git -C $basePath/$webRepo checkout meta || error
-    node build/packages.json.js || error
+    run git -C $basePath/$webRepo checkout meta
+    run node build/packages.json.js
 
     msg="Rebuild meta data phase 2"
     output Success "$msg" gitter
-    cd $basePath/$webRepo || error
-    node update.js || error
+    run cd $basePath/$webRepo
+    run node update.js
 
     msg="Commit meta data update in website repo"
     output Success "$msg" gitter
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
-        git -C $basePath/$webRepo add public/$file || error
+        run git -C $basePath/$webRepo add public/$file
     done
-    git -C $basePath/$webRepo commit --message="meta data" || error
+    run git -C $basePath/$webRepo commit --message="meta data"
 
     updateMeta=true
 fi
 
 output Info "Change directory into website repo and checkout to master branch"
 cd $basePath/$webRepo
-git checkout master || error
+run git checkout master
 
 output Info "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
@@ -105,7 +110,7 @@ else
     npm install
     msg="Rebase website's meta branch on master"
     output Success "$msg" gitter
-    git rebase master meta || error
+    run git rebase master meta
     updateRepo=true
 fi
 
@@ -117,22 +122,26 @@ if [ "$updateMeta" = true ]; then
         git push $remote meta:master -f || error "Failed deployment on $remote ..."
     done
     if [ "$pushMetaOnGitHub" = true ]; then
-        git push origin meta -f || error
+        run git push origin meta -f
     fi
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
         output Success "$msg" gitter
-        git checkout meta || error
-        GITHUB_OAUTH_TOKEN=$githubToken ALGOLIA_API_KEY=$algoliaToken node reindex.js  || error
+        run git checkout meta
+        export GITHUB_OAUTH_TOKEN=$githubToken
+        export ALGOLIA_API_KEY=$algoliaToken
+        run node reindex.js
+        unset GITHUB_OAUTH_TOKEN
+        unset ALGOLIA_API_KEY
     else
         error "Missing GitHub or algolia api key, cannot rebuild the searching index"
     fi
 elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website only, no need to deploy api due to meta data no update"
     output Success "$msg" gitter
-    git push heroku meta:master -f || error
+    run git push heroku meta:master -f
     if [ "$pushMetaOnGitHub" = true ]; then
-        git push origin meta -f || error
+        run git push origin meta -f
     fi
 else
     msg="Didn't update anything, no need to push or deploy."
