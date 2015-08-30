@@ -2,5 +2,8 @@ Dear all,
 
 Our build process just got an error while building the meta data/artifact of cdnjs project, our [website and api](https://github.com/cdnjs/new-website) may not be as new as our repository, however, the cdn service will not been affected, you can still use it, and modify the library name, version number and filename in the url can help you access all the content on cdnjs, we will fix the error as soon as possible, sorry for the inconvenience.
 
+PS:
+This issue ticket was created by our [buildScript](https://github.com/cdnjs/buildScript), the automatically meta data/artifact building script of cdnjs, not by the real maintainer, the issuer depends on the API key we are using.
+
 Best,
 Peter
