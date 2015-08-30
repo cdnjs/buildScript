@@ -12,3 +12,4 @@ updateRepo=false
 pushMetaOnGitHub=false
 
 logFile='build.log'
+logMode='clean' #append|clean

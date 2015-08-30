@@ -6,7 +6,9 @@ pth="$(dirname $(readlink -f $0))"
 
 . "$pth/config.sh"
 
-rm -f $pth/$logFile
+if [ "$logMode" = "clean" ]; then
+    rm -f $pth/$logFile
+fi
 
 . "$pth/colorEcho/dist/ColorEcho.bash"
 
