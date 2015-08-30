@@ -6,13 +6,13 @@ pth="$(dirname $(readlink -f $0))"
 
 . "$pth/config.sh"
 
-rm -f $logFile
+rm -f $pth/$logFile
 
 . "$pth/colorEcho/dist/ColorEcho.bash"
 
 function output()
 {
-    echo "[$1] $2" >> $logFile
+    echo "[$1] $2" >> $pth/$logFile
     case "$1" in
         "Warn" )
             echo.Red "$2"
