@@ -79,23 +79,23 @@ if [ "$status" = "Current branch master is up to date." ]; then
     output Info "$msg" gitter
 else
     msg="Make sure npm package dependencies, do npm install"
-    output Success "$msg"
+    output Info "$msg"
     run npm install
     msg="Run npm test before building the meta data/artifacts"
-    output Success "$msg"
+    output Info "$msg"
     run npm test
     msg="Rebuild meta data phase 1"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     run git -C $basePath/$webRepo checkout meta
     run node build/packages.json.js
 
     msg="Rebuild meta data phase 2"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     run cd $basePath/$webRepo
     run node update.js
 
     msg="Commit meta data update in website repo"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
         run git -C $basePath/$webRepo add public/$file
@@ -116,17 +116,17 @@ if [ "$webstatus" = "Current branch master is up to date." ]; then
     output Info "$msg" gitter
 else
     msg="Make sure npm package dependencies, do npm install"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     run npm install
     msg="Rebase website's meta branch on master"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     run git rebase master meta
     updateRepo=true
 fi
 
 if [ "$updateMeta" = true ]; then
     msg="Now push and deploy website & api"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     for remote in heroku heroku2
     do
         git push $remote meta:master -f || error "Failed deployment on $remote ..."
@@ -136,7 +136,7 @@ if [ "$updateMeta" = true ]; then
     fi
     if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
         msg="Now rebuild algolia search index"
-        output Success "$msg" gitter
+        output Info "$msg" gitter
         run git checkout meta
         export GITHUB_OAUTH_TOKEN=$githubToken
         export ALGOLIA_API_KEY=$algoliaToken
@@ -148,7 +148,7 @@ if [ "$updateMeta" = true ]; then
     fi
 elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website only, no need to deploy api due to meta data no update"
-    output Success "$msg" gitter
+    output Info "$msg" gitter
     run git push heroku meta:master -f
     if [ "$pushMetaOnGitHub" = true ]; then
         run git push origin meta -f
