@@ -71,6 +71,9 @@ else
     output Info "Local repo not found, will grab object(s) from GitHub"
 fi
 
+output Info "Reset repository to prevent unstaged changes break the build"
+run git reset --hard
+
 output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
 status=`git pull --rebase origin master`
 
@@ -108,6 +111,9 @@ fi
 output Info "Change directory into website repo and checkout to master branch"
 cd $basePath/$webRepo
 run git checkout master
+
+output Info "Reset repository to prevent unstaged changes break the build"
+run git reset --hard
 
 output Info "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
