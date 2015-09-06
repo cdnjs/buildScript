@@ -118,11 +118,12 @@ run git reset --hard
 output Info "Pull website repo with rebase from origin(Repo)"
 webstatus=`git pull --rebase`
 if [ ! "$webstatus" = "Current branch master is up to date." ]; then
-    msg="Make sure npm package dependencies, do npm install"
-    output Info "$msg" gitter
-    run npm install
     updateRepo=true
 fi
+
+msg="Make sure npm package dependencies, do npm install"
+output Info "$msg" gitter
+run npm install
 
 msg="Rebase website's meta branch on master"
 output Info "$msg" gitter
