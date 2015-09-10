@@ -62,6 +62,7 @@ fi
 
 cd "$basePath/$mainRepo"
 
+output Info "Start date time: `date`"
 output Info "Start website/api/index building process on PeterDaveHello's server ..." gitter
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
@@ -167,4 +168,5 @@ else
 fi
 
 msg="Update finished."
+output Info "End date time: `date`"
 output Success "$msg" gitter
