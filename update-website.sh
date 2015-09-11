@@ -129,7 +129,7 @@ run npm install
 msg="Rebase website's meta branch on master"
 output Info "$msg" gitter
 webstatus=`git rebase master meta`
-if [ ! "$webstatus" = "Current branch meta is up to date."]; then
+if [ ! "$webstatus" = "Current branch meta is up to date." ]; then
     updateRepo=true
 fi
 
