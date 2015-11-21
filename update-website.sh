@@ -89,9 +89,12 @@ else
     msg="Run npm test before building the meta data/artifacts"
     output Info "$msg"
     run npm test
+    msg="Reset and checkout website repository to meta branch"
+    output Info "$msg"
+    run git -C $basePath/$webRepo reset --hard
+    run git -C $basePath/$webRepo checkout meta
     msg="Rebuild meta data phase 1"
     output Info "$msg" gitter
-    run git -C $basePath/$webRepo checkout meta
     run node build/packages.json.js
 
     msg="Rebuild meta data phase 2"
