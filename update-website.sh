@@ -82,9 +82,10 @@ if [ "$status" = "Current branch master is up to date." ]; then
     msg="Cdnjs main reop is up to date, no need to rebuild";
     output Info "$msg" gitter
 else
-    msg="Make sure npm package dependencies, do npm install"
+    msg="Make sure npm package dependencies, do npm install && npm update"
     output Info "$msg"
     run npm install
+    run npm update
     msg="Run npm test before building the meta data/artifacts"
     output Info "$msg"
     run npm test
@@ -122,9 +123,10 @@ if [ ! "$webstatus" = "Current branch master is up to date." ]; then
     updateRepo=true
 fi
 
-msg="Make sure npm package dependencies, do npm install"
+msg="Make sure npm package dependencies, do npm install & npm update"
 output Info "$msg" gitter
 run npm install
+run npm update
 
 msg="Rebase website's meta branch on master"
 output Info "$msg" gitter
