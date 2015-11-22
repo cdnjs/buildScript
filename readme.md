@@ -24,7 +24,7 @@ Take a look at the script, set the path and api key in `config.sh` before use it
  * **cdnjsmaster** should have two remotes,
    * **origin** will point to the repo on GitHub
      * git@github.com:cdnjs/cdnjs.git
-   * **local** will points to the local working **cdnjs**, we want the most objects will be fetched locally.
+   * **local** will points to the local working **cdnjs**, we want most of the objects will be fetched locally.
      * For example: `/home/peter/cdnjs/cdnjs_working`
  * **new-website** should have 3 remotes,
    * **origin** will point to the repo on GitHub
