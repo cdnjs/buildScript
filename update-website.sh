@@ -155,6 +155,8 @@ if [ "$updateMeta" = true ]; then
         export GITHUB_OAUTH_TOKEN=$githubToken
         export ALGOLIA_API_KEY=$algoliaToken
         run node reindex.js
+        run git add GitHub.repos.meta.json
+        run git commit --amend --no-edit
         unset GITHUB_OAUTH_TOKEN
         unset ALGOLIA_API_KEY
     else
