@@ -65,15 +65,15 @@ cd "$basePath/$mainRepo"
 output Info "Start date time: `date`"
 output Info "Start website/api/index building process on PeterDaveHello's server ..." gitter
 
+output Info "Reset repository to prevent unstaged changes break the build"
+run git reset --hard
+
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     output Success "Exist cdnjs local repo, fetch objects from local branch first"
     run git fetch local
 else
     output Info "Local repo not found, will grab object(s) from GitHub"
 fi
-
-output Info "Reset repository to prevent unstaged changes break the build"
-run git reset --hard
 
 output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
 status=`git pull --rebase origin master`
