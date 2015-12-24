@@ -126,6 +126,9 @@ if [ ! "$webstatus" = "Current branch master is up to date." ]; then
     updateRepo=true
 fi
 
+output Info "Update/Initial submodule under website repo" gitter
+run git submodule update --init
+
 msg="Make sure npm package dependencies, do npm install & npm update"
 output Info "$msg" gitter
 run npm install
