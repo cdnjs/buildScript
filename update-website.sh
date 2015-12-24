@@ -53,11 +53,11 @@ function run()
 }
 
 if [ ! -d "$basePath/$mainRepo" ]; then
-    error "Main repo not found, exit now."
+    error "Main repo  '$basePath/$mainRepo' not found, exit now."
 fi
 
 if [ ! -d "$basePath/$webRepo" ]; then
-    error "website repo not found, exit now."
+    error "website repo '$basePath/$webRepo' not found, exit now."
 fi
 
 cd "$basePath/$mainRepo"
