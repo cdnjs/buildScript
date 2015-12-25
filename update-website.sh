@@ -49,6 +49,7 @@ function error()
 
 function run()
 {
+    echo "`date` [command] $@" >> $logPath/$logFile
     "$@" || error "Got error while running command: '$@'"
 }
 
