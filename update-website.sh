@@ -6,6 +6,9 @@ pth="$(dirname $(readlink -f $0))"
 
 . "$pth/config.sh"
 
+updateMeta=$forceUpdateMeta
+updateRepo=$forceUpdateRepo
+
 eval logPath=$logPath
 if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
     logPath=$pth
