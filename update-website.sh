@@ -9,6 +9,10 @@ pth="$(dirname $(readlink -f $0))"
 updateMeta=$forceUpdateMeta
 updateRepo=$forceUpdateRepo
 
+if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
+    timeout=3
+fi
+
 eval logPath=$logPath
 if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
     logPath=$pth
@@ -53,7 +57,13 @@ function error()
 function run()
 {
     echo "`date` [command] $@" >> $logPath/$logFile
-    "$@" || error "Got error while running command: '$@'"
+    timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
+    exitStatus=$?
+    if [ $exitStatus -eq 137 ]; then
+        error "Got timeout($timeout sec) while running command: '$@'"
+    elif [ $exitStatus -ne 0 ]; then
+        error "Got error while running command: '$@'"
+    fi
 }
 
 if [ ! -d "$basePath/$mainRepo" ]; then

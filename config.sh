@@ -11,6 +11,8 @@ forceUpdateRepo=false
 
 pushMetaOnGitHub=false
 
+timeout=600     #maximun execution time for a command, in second
+
 logFile='build.log'
 logMode='clean' #append|clean
 logPath=''      #if empty, log will be placed at the root of buildScript
