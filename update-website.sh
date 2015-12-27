@@ -57,12 +57,26 @@ function error()
 function run()
 {
     echo "`date` [command] $@" >> $logPath/$logFile
-    timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
-    exitStatus=$?
-    if [ $exitStatus -eq 137 ]; then
-        error "Got timeout($timeout sec) while running command: '$@'"
-    elif [ $exitStatus -ne 0 ]; then
-        error "Got error while running command: '$@'"
+
+    local isBuiltIn=false
+    type $1 &> /dev/null
+    if [ $? -eq 0 ]; then
+        local temp="`type $1 | head -n 1`"
+        if [ "$temp" = "$1 is a shell builtin" ]; then
+            isBuiltIn=true
+        fi
+    fi
+
+    if [ "$isBuiltIn" = "false" ]; then
+        timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
+        exitStatus=$?
+        if [ $exitStatus -eq 137 ]; then
+            error "Got timeout($timeout sec) while running command: '$@'"
+        elif [ $exitStatus -ne 0 ]; then
+            error "Got error while running command: '$@'"
+        fi
+    else
+        "$@" || error "Got error while running command: '$@'"
     fi
 }
 
