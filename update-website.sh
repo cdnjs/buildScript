@@ -50,7 +50,7 @@ function error()
     else
         MSG="$@";
     fi
-    output Warn "$MSG" gitter
+    output Warn "$MSG, pwd='`pwd`'" gitter
     exit 1
 }
 
