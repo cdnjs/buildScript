@@ -18,3 +18,4 @@ logMode='clean' #append|clean
 logPath=''      #if empty, log will be placed at the root of buildScript
 
 path="/usr/local/bin:/usr/bin:/bin"
+serverOwner="PeterDaveHello"
