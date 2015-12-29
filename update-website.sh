@@ -88,7 +88,7 @@ if [ ! -d "$basePath/$webRepo" ]; then
     error "website repo '$basePath/$webRepo' not found, exit now."
 fi
 
-cd "$basePath/$mainRepo"
+run cd "$basePath/$mainRepo"
 
 output Info "Start date time: `date`"
 output Info "Start website/api/index building process on PeterDaveHello's server ..." gitter
@@ -142,7 +142,7 @@ else
 fi
 
 output Info "Change directory into website repo"
-cd $basePath/$webRepo
+run cd $basePath/$webRepo
 
 output Info "Reset repository to prevent unstaged changes break the build"
 run git reset --hard
