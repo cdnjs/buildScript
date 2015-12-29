@@ -105,7 +105,7 @@ else
 fi
 
 output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-status=`git pull --rebase origin master`
+status=`run git pull --rebase origin master`
 
 if [ "$status" = "Current branch master is up to date." ]; then
     msg="Cdnjs main reop is up to date, no need to rebuild";
@@ -152,7 +152,7 @@ output Info "Checkout to master branch"
 run git checkout master
 
 output Info "Pull website repo with rebase from origin(Repo)"
-webstatus=`git pull --rebase`
+webstatus=`run git pull --rebase`
 if [ ! "$webstatus" = "Current branch master is up to date." ]; then
     updateRepo=true
 fi
@@ -167,7 +167,7 @@ run npm update
 
 msg="Rebase website's meta branch on master"
 output Info "$msg" gitter
-webstatus=`git rebase master meta`
+webstatus=`run git rebase master meta`
 if [ ! "$webstatus" = "Current branch meta is up to date." ]; then
     updateRepo=true
 fi
