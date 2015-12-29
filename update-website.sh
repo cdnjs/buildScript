@@ -9,6 +9,8 @@ pth="$(dirname $(readlink -f $0))"
 updateMeta=$forceUpdateMeta
 updateRepo=$forceUpdateRepo
 
+export PATH="$path:$PATH"
+
 if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
     timeout=3
 fi

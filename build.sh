@@ -6,6 +6,7 @@ StartTimestamp="`date +%s`"
 
 pth="$(dirname $(readlink -f $0))"
 . "$pth/config.sh"
+export PATH="$path:$PATH"
 
 apiUrl='https://api.github.com/repos/cdnjs/cdnjs/issues'
 
