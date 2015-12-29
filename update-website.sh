@@ -135,9 +135,9 @@ else
     output Info "$msg" gitter
     for file in atom.xml packages.min.json rss.xml sitemap.xml
     do
-        run git -C $basePath/$webRepo add public/$file
+        run git add public/$file
     done
-    run git -C $basePath/$webRepo commit --message="meta data"
+    run git commit --message="meta data"
 
     updateMeta=true
 fi
