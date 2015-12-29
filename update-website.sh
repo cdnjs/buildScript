@@ -90,12 +90,11 @@ if [ ! -d "$basePath/$webRepo" ]; then
     error "website repo '$basePath/$webRepo' not found, exit now."
 fi
 
-run cd "$basePath/$mainRepo"
-
 output Info "Start date time: `date`"
 output Info "Start website/api/index building process on PeterDaveHello's server ..." gitter
 
 output Info "Reset repository to prevent unstaged changes break the build"
+run cd "$basePath/$mainRepo"
 run git reset --hard
 
 if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
