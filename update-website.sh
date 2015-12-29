@@ -117,7 +117,7 @@ else
     run npm update
     msg="Run npm test before building the meta data/artifacts"
     output Info "$msg"
-    run npm test
+    run npm test -- --silent
     msg="Reset and checkout website repository to meta branch"
     output Info "$msg"
     run git -C $basePath/$webRepo reset --hard
