@@ -209,5 +209,5 @@ else
 fi
 
 msg="Update finished."
-output Info "End date time: `date`"
 output Success "$msg" gitter
+output Info "End date time: `date`"
