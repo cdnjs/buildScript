@@ -47,6 +47,7 @@ function output()
 
 function error()
 {
+    local MSG
     if [ "$#" = "0" ]; then
         MSG="Error"
     else
@@ -71,7 +72,7 @@ function run()
 
     if [ "$isBuiltIn" = "false" ]; then
         nice -n $nice timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
-        exitStatus=$?
+        local exitStatus=$?
         if [ $exitStatus -eq 137 ]; then
             error "Got timeout($timeout sec) while running command: '$@'"
         elif [ $exitStatus -ne 0 ]; then
