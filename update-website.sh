@@ -70,7 +70,7 @@ function run()
     fi
 
     if [ "$isBuiltIn" = "false" ]; then
-        timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
+        nice -n $nice timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
         exitStatus=$?
         if [ $exitStatus -eq 137 ]; then
             error "Got timeout($timeout sec) while running command: '$@'"

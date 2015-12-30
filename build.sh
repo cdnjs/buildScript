@@ -17,7 +17,7 @@ IssueContent="`sed ':a;N;$!ba;s/\n/\\\n/g' $pth/issueTemplate`"
 
 Issue="{ \"title\": \"$IssueTitle\", \"body\": \"$IssueContent\", \"assignee\": \"$IssueAssignee\", \"labels\": $IssueLabels }"
 
-nice -n $nice "$pth/update-website.sh"
+$pth/update-website.sh build
 
 error=$?
 
