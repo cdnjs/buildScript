@@ -17,8 +17,16 @@ IssueContent="`sed ':a;N;$!ba;s/\n/\\\n/g' $pth/issueTemplate`"
 
 Issue="{ \"title\": \"$IssueTitle\", \"body\": \"$IssueContent\", \"assignee\": \"$IssueAssignee\", \"labels\": $IssueLabels }"
 
-nice -n 15 "$pth/update-website.sh" || curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+nice -n 15 "$pth/update-website.sh"
+
+error=$?
+
+if [ $error -ne 0 ]; then
+    curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+fi
+
 
 EndTimestamp="`date +%s`"
 
 echo -e "\nTotal time spent for this build is _$(($EndTimestamp - $StartTimestamp))_ second(s)\n"
+exit $error
