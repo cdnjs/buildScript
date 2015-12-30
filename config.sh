@@ -12,6 +12,7 @@ forceUpdateRepo=false
 pushMetaOnGitHub=false
 
 timeout=600     #maximun execution time for a command, in second
+nice=15
 
 logFile='build.log'
 logMode='clean' #append|clean
