@@ -152,7 +152,7 @@ output Info "Checkout to master branch"
 run git checkout master
 
 output Info "Pull website repo with rebase from origin(Repo)"
-webstatus=`run git pull --rebase`
+webstatus=`run git pull --rebase origin master`
 if [ ! "$webstatus" = "Current branch master is up to date." ]; then
     updateRepo=true
 fi
