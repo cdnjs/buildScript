@@ -2,29 +2,35 @@
 
 set -e
 
-pth="$(dirname $(readlink -f $0))"
+function init()
+{
+    . "$pth/config.sh"
 
-. "$pth/config.sh"
+    updateMeta=$forceUpdateMeta
+    updateRepo=$forceUpdateRepo
 
-updateMeta=$forceUpdateMeta
-updateRepo=$forceUpdateRepo
+    export PATH="$path:$PATH"
 
-export PATH="$path:$PATH"
+    if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
+        timeout=3
+    fi
 
-if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
-    timeout=3
-fi
+    eval logPath=$logPath
+    if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
+        logPath=$pth
+    fi
 
-eval logPath=$logPath
-if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
-    logPath=$pth
-fi
+    if [ "$logMode" = "clean" ]; then
+        rm -f $logPath/$logFile
+    fi
 
-if [ "$logMode" = "clean" ]; then
-    rm -f $logPath/$logFile
-fi
+    . "$pth/colorEcho/dist/ColorEcho.bash"
+}
 
-. "$pth/colorEcho/dist/ColorEcho.bash"
+function setBasePath()
+{
+    echo "$(dirname $(readlink -f $0))"
+}
 
 function output()
 {
@@ -217,4 +223,6 @@ function build()
     output Info "End date time: `date`"
 }
 
+pth=$(setBasePath)
+init
 build
