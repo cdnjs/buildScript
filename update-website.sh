@@ -187,7 +187,7 @@ function build()
         output Info "$msg" gitter
         for remote in heroku heroku2
         do
-            git push $remote meta:master -f || error "Failed deployment on $remote ..."
+            run git push $remote meta:master -f || error "Failed deployment on $remote ..."
         done
         if [ "$pushMetaOnGitHub" = true ]; then
             run git push origin meta -f
