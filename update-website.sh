@@ -2,6 +2,7 @@
 
 function init()
 {
+    pth=$(setBasePath)
     . "$pth/config.sh"
 
     updateMeta=$forceUpdateMeta
@@ -222,7 +223,6 @@ function build()
 }
 
 if [ "$1" = "build" ]; then
-    pth=$(setBasePath)
     set -e
     init
     build
