@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 function init()
 {
     . "$pth/config.sh"
@@ -225,6 +223,7 @@ function build()
 
 if [ "$1" = "build" ]; then
     pth=$(setBasePath)
+    set -e
     init
     build
 fi
