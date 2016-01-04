@@ -29,7 +29,7 @@ function init()
 
 function setBasePath()
 {
-    echo "$(dirname $(readlink -f $0))"
+    echo "$(dirname $(realpath ${BASH_SOURCE[0]}))"
 }
 
 function output()
