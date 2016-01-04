@@ -1,3 +1,6 @@
 [submodule "colorEcho"]
 	path = colorEcho
 	url = https://github.com/PeterDaveHello/ColorEchoForShell.git
+[submodule "bu"]
+	path = bu
+	url = https://github.com/PeterDaveHello/bu.git
