@@ -1,0 +1,16 @@
+git:
+  depth: 10
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+sudo: false
+before_install: git submodule update --init --recursive
+script: ./bu/bu_test.sh
+addons:
+  apt:
+    packages:
+    - sed
+    - bc
+    - timelimit
+    - realpath
