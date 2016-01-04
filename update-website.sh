@@ -223,6 +223,8 @@ function build()
     output Info "End date time: `date`"
 }
 
-pth=$(setBasePath)
-init
-build
+if [ "$1" = "build" ]; then
+    pth=$(setBasePath)
+    init
+    build
+fi
