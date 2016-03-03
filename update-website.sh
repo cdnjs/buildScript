@@ -226,7 +226,7 @@ function build()
 }
 
 if [ "$1" = "build" ]; then
-    set -e
+    set +e
     init
     build
 fi
