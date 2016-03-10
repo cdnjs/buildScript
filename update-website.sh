@@ -109,6 +109,11 @@ function build()
     output Info "Start date time: `date`"
     output Info "Start website/api/index building process on $serverOwner's server ..." gitter
     output Info "PATH=$PATH"
+    if [[ ! -z "$NVM_BIN" ]]; then
+        output Info "nvm version: `nvm --version`"
+    fi
+    output Info "nodejs version: `node --version`"
+    output Info "npm version: `npm --version`"
 
     output Info "Reset repository to prevent unstaged changes break the build"
     run cd "$basePath/$mainRepo"
