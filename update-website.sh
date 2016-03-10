@@ -8,9 +8,8 @@ function init()
     updateMeta=$forceUpdateMeta
     updateRepo=$forceUpdateRepo
 
-    if [[ ! -z "$NVM_BIN" ]] || [[ ! -z "$NVM_DIR" ]]; then
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-    fi
+    NVM_DIR=$HOME/.nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
     export PATH="$path:$PATH"
 
