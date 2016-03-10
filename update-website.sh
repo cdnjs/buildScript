@@ -104,6 +104,7 @@ function build()
 
     output Info "Start date time: `date`"
     output Info "Start website/api/index building process on $serverOwner's server ..." gitter
+    output Info "PATH=$PATH"
 
     output Info "Reset repository to prevent unstaged changes break the build"
     run cd "$basePath/$mainRepo"
