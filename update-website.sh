@@ -8,6 +8,10 @@ function init()
     updateMeta=$forceUpdateMeta
     updateRepo=$forceUpdateRepo
 
+    if [[ ! -z "$NVM_BIN" ]];
+        path="$NVM_BIN:$path"
+    fi
+
     export PATH="$path:$PATH"
 
     if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
