@@ -111,7 +111,9 @@ function build()
     if [[ ! -z "$NVM_BIN" ]]; then
         output Info "nvm version: `nvm --version`"
     fi
+    output Info "nodejs path: `type node`"
     output Info "nodejs version: `node --version`"
+    output Info "npm path: `type npm`"
     output Info "npm version: `npm --version`"
 
     output Info "Reset repository to prevent unstaged changes break the build"
