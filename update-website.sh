@@ -108,6 +108,8 @@ function build()
     output Info "Start date time: `date`"
     output Info "Start website/api/index building process on $serverOwner's server ..." gitter
     output Info "PATH=$PATH"
+    output Info "bash path: `type bash`"
+    output Info "bash version: $BASH_VERSION"
     if [[ ! -z "$NVM_BIN" ]]; then
         output Info "nvm version: `nvm --version`"
     fi
