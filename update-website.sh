@@ -117,6 +117,8 @@ function build()
     output Info "nodejs version: `node --version`"
     output Info "npm path: `type npm`"
     output Info "npm version: `npm --version`"
+    output Info "git path: `type git`"
+    output Info "git version: `git --version`"
 
     output Info "Reset repository to prevent unstaged changes break the build"
     run cd "$basePath/$mainRepo"
