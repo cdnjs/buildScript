@@ -36,7 +36,7 @@ function setBasePath()
 
 function git-reset-hard-if-needed()
 {
-    run git diff --exit-code > /dev/null
+    git diff --exit-code > /dev/null
     if [ ! "$?" = "0" ]; then
         echo diff found, so reset!
         run git reset --hard
