@@ -34,6 +34,17 @@ function setBasePath()
     echo "$(dirname $(realpath ${BASH_SOURCE[0]}))"
 }
 
+function git-reset-hard-if-needed()
+{
+    run git diff --exit-code > /dev/null
+    if [ ! "$?" = "0" ]; then
+        echo diff found, so reset!
+        run git reset --hard
+    else
+        echo no diff found, so do not reset!
+    fi
+}
+
 function output()
 {
     echo "`date` [$1] $2" >> $logPath/$logFile
@@ -122,7 +133,7 @@ function build()
 
     output Info "Reset repository to prevent unstaged changes break the build"
     run cd "$basePath/$mainRepo"
-    run git reset --hard
+    git-reset-hard-if-needed
 
     if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
         output Success "Exist cdnjs local repo, fetch objects from local branch first"
@@ -173,7 +184,7 @@ function build()
     run cd $basePath/$webRepo
 
     output Info "Reset repository to prevent unstaged changes break the build"
-    run git reset --hard
+    git-reset-hard-if-needed
 
     output Info "Checkout to master branch"
     run git checkout master
