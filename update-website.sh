@@ -235,9 +235,12 @@ function build()
             error "Missing GitHub or algolia api key, cannot rebuild the searching index"
         fi
     elif [ "$updateRepo" = true ]; then
-        msg="Now push and deploy website only, no need to deploy api due to meta data no update"
+        msg="Now push and deploy website and api"
         output Info "$msg" gitter
-        run git push heroku meta:master -f
+        for remote in heroku heroku2
+        do
+            run git push $remote meta:master -f || error "Failed deployment on $remote ..."
+        done
         if [ "$pushMetaOnGitHub" = true ]; then
             run git push origin meta -f
         fi
