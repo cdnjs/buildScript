@@ -11,7 +11,7 @@ forceUpdateRepo=false
 
 pushMetaOnGitHub=false
 
-timeout=600     #maximun execution time for a command, in second
+timeout=1200     #maximun execution time for a command, in second
 nice=15
 
 logFile='build.log'
