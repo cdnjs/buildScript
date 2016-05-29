@@ -38,10 +38,10 @@ function git-reset-hard-if-needed()
 {
     git diff --exit-code > /dev/null
     if [ ! "$?" = "0" ]; then
-        echo diff found, so reset!
+        output Info "Repo diff found, so reset!"
         run git reset --hard
     else
-        echo no diff found, so do not reset!
+        output Info "Repo diff not found, so do not reset!"
     fi
 }
 
