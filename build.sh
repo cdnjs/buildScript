@@ -27,10 +27,7 @@ $pth/update-website.sh build
 
 error=$?
 
-if [ $error -ne 0 ]; then
-    curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
-fi
-
+[[ $error -ne 0 ]] && curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
 
 EndTimestamp="`date +%s`"
 

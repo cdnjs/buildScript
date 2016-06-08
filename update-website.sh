@@ -22,9 +22,7 @@ function init()
         logPath=$pth
     fi
 
-    if [ "$logMode" = "clean" ]; then
-        rm -f $logPath/$logFile
-    fi
+    [[ "$logMode" = "clean" ]] && rm -f $logPath/$logFile
 
     . "$pth/colorEcho/dist/ColorEcho.bash"
 }
@@ -87,9 +85,7 @@ function run()
     type $1 &> /dev/null
     if [ $? -eq 0 ]; then
         local temp="`type $1 | head -n 1`"
-        if [ "$temp" = "$1 is a shell builtin" ]; then
-            isBuiltIn=true
-        fi
+        [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
     fi
 
     if [ "$isBuiltIn" = "false" ]; then
@@ -108,22 +104,16 @@ function run()
 function build()
 {
 
-    if [ ! -d "$basePath/$mainRepo" ]; then
-        error "Main repo  '$basePath/$mainRepo' not found, exit now."
-    fi
+    [[ -d "$basePath/$mainRepo" ]] || error "Main repo  '$basePath/$mainRepo' not found, exit now."
 
-    if [ ! -d "$basePath/$webRepo" ]; then
-        error "website repo '$basePath/$webRepo' not found, exit now."
-    fi
+    [[ -d "$basePath/$webRepo" ]] || error "website repo '$basePath/$webRepo' not found, exit now."
 
     output Info "Start date time: `date`"
     output Info "Start website/api/index building process on $serverOwner's server ..." gitter
     output Info "PATH=$PATH"
     output Info "bash path: `type bash`"
     output Info "bash version: $BASH_VERSION"
-    if [[ ! -z "$NVM_BIN" ]]; then
-        output Info "nvm version: `nvm --version`"
-    fi
+    [[ -z "$NVM_BIN" ]] || output Info "nvm version: `nvm --version`"
     output Info "nodejs path: `type node`"
     output Info "nodejs version: `node --version`"
     output Info "npm path: `type npm`"
@@ -191,9 +181,7 @@ function build()
 
     output Info "Pull website repo with rebase from origin(Repo)"
     webstatus=`run git pull --rebase origin master`
-    if [ ! "$webstatus" = "Current branch master is up to date." ]; then
-        updateRepo=true
-    fi
+    [[ "$webstatus" = "Current branch master is up to date." ]] || updateRepo=true
 
     output Info "Update/Initial submodule under website repo" gitter
     run git submodule update --init
@@ -206,9 +194,7 @@ function build()
     msg="Rebase website's meta branch on master"
     output Info "$msg" gitter
     webstatus=`run git rebase master meta`
-    if [ ! "$webstatus" = "Current branch meta is up to date." ]; then
-        updateRepo=true
-    fi
+    [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
 
     if [ "$updateMeta" = true ]; then
         msg="Now push and deploy website & api"
@@ -217,9 +203,7 @@ function build()
         do
             run git push $remote meta:master -f || error "Failed deployment on $remote ..."
         done
-        if [ "$pushMetaOnGitHub" = true ]; then
-            run git push origin meta -f
-        fi
+        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" gitter
@@ -241,9 +225,7 @@ function build()
         do
             run git push $remote meta:master -f || error "Failed deployment on $remote ..."
         done
-        if [ "$pushMetaOnGitHub" = true ]; then
-            run git push origin meta -f
-        fi
+        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
     else
         msg="Didn't update anything, no need to push or deploy."
         output Info "$msg" gitter
