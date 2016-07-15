@@ -183,13 +183,15 @@ function build()
     webstatus=`run git pull --rebase origin master`
     [[ "$webstatus" = "Current branch master is up to date." ]] || updateRepo=true
 
-    output Info "Update/Initial submodule under website repo" gitter
-    run git submodule update --init
+    if [ "$updateRepo" = true ]; then
+        output Info "Update/Initial submodule under website repo" gitter
+        run git submodule update --init
 
-    msg="Make sure npm package dependencies, do npm install & npm update"
-    output Info "$msg" gitter
-    run npm install
-    run npm update
+        msg="Make sure npm package dependencies, do npm install & npm update"
+        output Info "$msg" gitter
+        run npm install
+        run npm update
+    fi
 
     msg="Rebase website's meta branch on master"
     output Info "$msg" gitter
