@@ -9,7 +9,11 @@ function init()
     updateRepo=$forceUpdateRepo
 
     NVM_DIR=$HOME/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    if [ -s "$NVM_DIR/nvm.sh" ]; then
+        . "$NVM_DIR/nvm.sh"
+        nvm install 4
+        nvm use --delete-prefix v4
+    fi
 
     export PATH="$path:$PATH"
 
