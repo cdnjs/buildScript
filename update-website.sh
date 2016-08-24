@@ -2,11 +2,11 @@
 
 function init()
 {
-    pth=$(setBasePath)
+    pth="$(setBasePath)"
     . "$pth/config.sh"
 
-    updateMeta=$forceUpdateMeta
-    updateRepo=$forceUpdateRepo
+    updateMeta="$forceUpdateMeta"
+    updateRepo="$forceUpdateRepo"
 
     NVM_DIR=$HOME/.nvm
     if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -17,16 +17,16 @@ function init()
 
     export PATH="$path:$PATH"
 
-    if [[ ! $timeout =~ ^[0-9]+$ ]] || [ $timeout -le 3 ]; then
+    if [[ ! $timeout =~ ^[0-9]+$ ]] || [[ $timeout -le 3 ]]; then
         timeout=3
     fi
 
-    eval logPath=$logPath
+    eval logPath="$logPath"
     if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
-        logPath=$pth
+        logPath="$pth"
     fi
 
-    [[ "$logMode" = "clean" ]] && rm -f $logPath/$logFile
+    [[ "$logMode" = "clean" ]] && rm -f "$logPath/$logFile"
 
     . "$pth/colorEcho/dist/ColorEcho.bash"
 }
@@ -49,7 +49,7 @@ function git-reset-hard-if-needed()
 
 function output()
 {
-    echo "`date` [$1] $2" >> $logPath/$logFile
+    echo "$(date) [$1] $2" >> "$logPath/$logFile"
     case "$1" in
         "Warn" )
             echo.Red "$2"
@@ -77,24 +77,24 @@ function error()
     else
         MSG="$@";
     fi
-    output Warn "$MSG, pwd='`pwd`'" gitter
+    output Warn "$MSG, pwd='$(pwd)'" gitter
     exit 1
 }
 
 function run()
 {
-    echo "`date` [command] $@" >> $logPath/$logFile
+    echo "$(date) [command] $@" >> "$logPath/$logFile"
 
     local isBuiltIn=false
-    type $1 &> /dev/null
+    type "$1" &> /dev/null
     if [ $? -eq 0 ]; then
-        local temp="`type $1 | head -n 1`"
+        local temp="$(type $1 | head -n 1)"
         [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
     fi
 
     if [ "$isBuiltIn" = "false" ]; then
         nice -n $nice timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
-        local exitStatus=$?
+        local exitStatus="$?"
         if [ $exitStatus -eq 137 ]; then
             error "Got timeout($timeout sec) while running command: '$@'"
         elif [ $exitStatus -ne 0 ]; then
@@ -112,18 +112,18 @@ function build()
 
     [[ -d "$basePath/$webRepo" ]] || error "website repo '$basePath/$webRepo' not found, exit now."
 
-    output Info "Start date time: `date`"
+    output Info "Start date time: $(date)"
     output Info "Start website/api/index building process on $serverOwner's server ..." gitter
     output Info "PATH=$PATH"
-    output Info "bash path: `type bash`"
+    output Info "bash path: $(type bash)"
     output Info "bash version: $BASH_VERSION"
-    [[ -z "$NVM_BIN" ]] || output Info "nvm version: `nvm --version`"
-    output Info "nodejs path: `type node`"
-    output Info "nodejs version: `node --version`"
-    output Info "npm path: `type npm`"
-    output Info "npm version: `npm --version`"
-    output Info "git path: `type git`"
-    output Info "git version: `git --version`"
+    [[ -z "$NVM_BIN" ]] || output Info "nvm version: $(nvm --version)"
+    output Info "nodejs path: $(type node)"
+    output Info "nodejs version: $(node --version)"
+    output Info "npm path: $(type npm)"
+    output Info "npm version: $(npm --version)"
+    output Info "git path: $(type git)"
+    output Info "git version: $(git --version)"
 
     output Info "Reset repository to prevent unstaged changes break the build"
     run cd "$basePath/$mainRepo"
@@ -137,7 +137,7 @@ function build()
     fi
 
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-    status=`run git pull --rebase origin master`
+    status="$(run git pull --rebase origin master)"
 
     if [ "$status" = "Current branch master is up to date." ]; then
         msg="Cdnjs main reop is up to date, no need to rebuild";
@@ -152,15 +152,15 @@ function build()
         run npm test -- --silent
         msg="Reset and checkout website repository to meta branch"
         output Info "$msg"
-        run git -C $basePath/$webRepo reset --hard
-        run git -C $basePath/$webRepo checkout meta
+        run git -C "$basePath/$webRepo" reset --hard
+        run git -C "$basePath/$webRepo" checkout meta
         msg="Rebuild meta data phase 1"
         output Info "$msg" gitter
         run node build/packages.json.js
 
         msg="Rebuild meta data phase 2"
         output Info "$msg" gitter
-        run cd $basePath/$webRepo
+        run cd "$basePath/$webRepo"
         run node update.js
 
         msg="Commit meta data update in website repo"
@@ -175,7 +175,7 @@ function build()
     fi
 
     output Info "Change directory into website repo"
-    run cd $basePath/$webRepo
+    run cd "$basePath/$webRepo"
 
     output Info "Reset repository to prevent unstaged changes break the build"
     git-reset-hard-if-needed
@@ -184,7 +184,7 @@ function build()
     run git checkout master
 
     output Info "Pull website repo with rebase from origin(Repo)"
-    webstatus=`run git pull --rebase origin master`
+    webstatus="$(run git pull --rebase origin master)"
     [[ "$webstatus" = "Current branch master is up to date." ]] || updateRepo=true
 
     if [ "$updateRepo" = true ]; then
@@ -199,7 +199,7 @@ function build()
 
     msg="Rebase website's meta branch on master"
     output Info "$msg" gitter
-    webstatus=`run git rebase master meta`
+    webstatus="$(run git rebase master meta)"
     [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
 
     if [ "$updateMeta" = true ]; then
@@ -207,15 +207,15 @@ function build()
         output Info "$msg" gitter
         for remote in heroku heroku2
         do
-            run git push $remote meta:master -f || error "Failed deployment on $remote ..."
+            run git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
         done
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" gitter
             run git checkout meta
-            export GITHUB_OAUTH_TOKEN=$githubToken
-            export ALGOLIA_API_KEY=$algoliaToken
+            export GITHUB_OAUTH_TOKEN="$githubToken"
+            export ALGOLIA_API_KEY="$algoliaToken"
             run node reindex.js
             run git add GitHub.repos.meta.json
             run git commit --amend --no-edit
@@ -229,7 +229,7 @@ function build()
         output Info "$msg" gitter
         for remote in heroku heroku2
         do
-            run git push $remote meta:master -f || error "Failed deployment on $remote ..."
+            run git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
         done
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
     else
@@ -239,7 +239,7 @@ function build()
 
     msg="Update finished."
     output Success "$msg" gitter
-    output Info "End date time: `date`"
+    output Info "End date time: $(date)"
 }
 
 if [ "$1" = "build" ]; then
