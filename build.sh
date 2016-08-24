@@ -21,7 +21,7 @@ apiUrl='https://api.github.com/repos/cdnjs/cdnjs/issues'
 IssueTitle="[Build failed] Got error while building meta data/artifact"
 IssueAssignee="PeterDaveHello"
 IssueLabels='["Bug - High Priority"]'
-IssueContent="$($sed ':a;N;$!ba;s/\n/\\n/g' "$pth/issueTemplate"))"
+IssueContent="$($sed ':a;N;$!ba;s/\n/\\n/g' "$pth/issueTemplate")"
 
 Issue="{ \"title\": \"$IssueTitle\", \"body\": \"$IssueContent\", \"assignee\": \"$IssueAssignee\", \"labels\": $IssueLabels }"
 
