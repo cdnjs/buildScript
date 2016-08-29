@@ -141,7 +141,7 @@ function build()
     status="$(run git pull --rebase origin master)"
 
     if [ "$status" = "Current branch master is up to date." ]; then
-        msg="Cdnjs main reop is up to date, no need to rebuild";
+        msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
     else
         msg="Make sure npm package dependencies, do npm install && npm update"
