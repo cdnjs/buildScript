@@ -64,8 +64,9 @@ function output()
             echo "$1"
         ;;
     esac
-    if [ ! -z "$3" ] && [ "$3" = "gitter" ]; then
+    if [ ! -z "$3" ] && [ "$3" = "chat-room" ]; then
         curl --silent -d message="[cronjob] $2" "$gitterHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our gitter chatroom"
+        curl --silent -X POST --data-urlencode 'payload={"channel": "#build-server", "username": "buildScript", "text": "'"$2"'", "icon_emoji": ":building_construction:"}' "$slackHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our Slack chatroom"
     fi
 }
 
@@ -77,7 +78,7 @@ function error()
     else
         MSG="$@";
     fi
-    output Warn "$MSG, pwd='$(pwd)'" gitter
+    output Warn "$MSG, pwd='$(pwd)'" chat-room
     exit 1
 }
 
@@ -113,7 +114,7 @@ function build()
     [[ -d "$basePath/$webRepo" ]] || error "website repo '$basePath/$webRepo' not found, exit now."
 
     output Info "Start date time: $(date)"
-    output Info "Start website/api/index building process on $serverOwner's server ..." gitter
+    output Info "Start website/api/index building process on $serverOwner's server ..." chat-room
     output Info "PATH=$PATH"
     output Info "bash path: $(type bash)"
     output Info "bash version: $BASH_VERSION"
@@ -141,7 +142,7 @@ function build()
 
     if [ "$status" = "Current branch master is up to date." ]; then
         msg="Cdnjs main reop is up to date, no need to rebuild";
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
     else
         msg="Make sure npm package dependencies, do npm install && npm update"
         output Info "$msg"
@@ -155,16 +156,16 @@ function build()
         run git -C "$basePath/$webRepo" reset --hard
         run git -C "$basePath/$webRepo" checkout meta
         msg="Rebuild meta data phase 1"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         run node build/packages.json.js
 
         msg="Rebuild meta data phase 2"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         run cd "$basePath/$webRepo"
         run node update.js
 
         msg="Commit meta data update in website repo"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         for file in atom.xml packages.min.json rss.xml sitemap.xml
         do
             run git add public/$file
@@ -188,23 +189,23 @@ function build()
     [[ "$webstatus" = "Current branch master is up to date." ]] || updateRepo=true
 
     if [ "$updateRepo" = true ]; then
-        output Info "Update/Initial submodule under website repo" gitter
+        output Info "Update/Initial submodule under website repo" chat-room
         run git submodule update --init
 
         msg="Make sure npm package dependencies, do npm install & npm update"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         run npm install
         run npm update
     fi
 
     msg="Rebase website's meta branch on master"
-    output Info "$msg" gitter
+    output Info "$msg" chat-room
     webstatus="$(run git rebase master meta)"
     [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
 
     if [ "$updateMeta" = true ]; then
         msg="Now push and deploy website & api"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         for remote in heroku heroku2
         do
             run git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
@@ -212,7 +213,7 @@ function build()
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
-            output Info "$msg" gitter
+            output Info "$msg" chat-room
             run git checkout meta
             export GITHUB_OAUTH_TOKEN="$githubToken"
             export ALGOLIA_API_KEY="$algoliaToken"
@@ -226,7 +227,7 @@ function build()
         fi
     elif [ "$updateRepo" = true ]; then
         msg="Now push and deploy website and api"
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
         for remote in heroku heroku2
         do
             run git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
@@ -234,11 +235,11 @@ function build()
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
     else
         msg="Didn't update anything, no need to push or deploy."
-        output Info "$msg" gitter
+        output Info "$msg" chat-room
     fi
 
     msg="Update finished."
-    output Success "$msg" gitter
+    output Success "$msg" chat-room
     output Info "End date time: $(date)"
 }
 

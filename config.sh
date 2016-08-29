@@ -1,6 +1,7 @@
 githubToken=""
 algoliaToken=""
 gitterHook=""
+slackHook=""
 
 basePath="/home/user/cdnjs"
 mainRepo="cdnjsmaster"
