@@ -206,7 +206,7 @@ function build()
     fi
 
     msg="Rebase website's meta branch on master"
-    output Info "$msg" chat-room
+    output Info "$msg"
     webstatus="$(run git rebase master meta)"
     [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
 
