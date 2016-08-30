@@ -36,6 +36,12 @@ function setBasePath()
     echo "$(dirname $(realpath ${BASH_SOURCE[0]}))"
 }
 
+function git-checkout-master-if-needed()
+{
+    currentBranch="`git branch | grep '^\*\ ' | awk '{print $2}'`"
+    [[ "$currentBranch" = "master" ]] || run git checkout master
+}
+
 function git-reset-hard-if-needed()
 {
     git diff --exit-code > /dev/null
@@ -137,6 +143,8 @@ function build()
         output Info "Local repo not found, will grab object(s) from GitHub"
     fi
 
+    git-checkout-master-if-needed
+
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
     status="$(run git pull --rebase origin master)"
 
@@ -180,9 +188,7 @@ function build()
 
     output Info "Reset repository to prevent unstaged changes break the build"
     git-reset-hard-if-needed
-
-    output Info "Checkout to master branch"
-    run git checkout master
+    git-checkout-master-if-needed
 
     output Info "Pull website repo with rebase from origin(Repo)"
     webstatus="$(run git pull --rebase origin master)"
