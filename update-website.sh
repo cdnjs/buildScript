@@ -178,6 +178,7 @@ function build()
         do
             run git add public/$file
         done
+        run git add sri
         run git commit --message="meta data"
 
         updateMeta=true
