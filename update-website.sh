@@ -72,7 +72,7 @@ function output()
     esac
     if [ ! -z "$3" ] && [ "$3" = "chat-room" ]; then
         curl --silent -d message="[cronjob] $2" "$gitterHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our gitter chatroom"
-        curl --silent -X POST --data-urlencode 'payload={"channel": "#build-server", "username": "buildScript", "text": "'"$2"'", "icon_emoji": ":building_construction:"}' "$slackHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our Slack chatroom"
+        curl --silent -X POST --data-urlencode 'payload={"channel": "#'$slackChannel'", "username": "buildScript", "text": "'"$2"'", "icon_emoji": ":building_construction:"}' "$slackHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our Slack chatroom"
     fi
 }
 

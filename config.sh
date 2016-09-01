@@ -2,6 +2,7 @@ githubToken=""
 algoliaToken=""
 gitterHook=""
 slackHook=""
+slackChannel="build-server"
 
 basePath="/home/user/cdnjs"
 mainRepo="cdnjsmaster"
