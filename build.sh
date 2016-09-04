@@ -6,6 +6,8 @@ StartTimestamp="$(date +%s)"
 
 pth="$(dirname "$(readlink -f "$0")")"
 
+cat "$pth/banner"
+
 . "$pth/config.sh"
 
 export PATH="$path:$PATH"
