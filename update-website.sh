@@ -152,6 +152,8 @@ function build()
         msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
     else
+        msg="Cdnjs main repo updates found! Start the rebuild rebuild process"
+        output Info "$msg" chat-room
         msg="Make sure npm package dependencies, do npm install && npm update"
         output Info "$msg"
         run npm install
@@ -199,6 +201,8 @@ function build()
         $updateMeta && msg="$msg, but we'll still deploy artifacts since main repo has updates.";
         output Info "$msg" chat-room
     else
+        msg="Cdnjs website repo updates found!"
+        output Info "$msg" chat-room
         updateRepo=true
     fi
 
