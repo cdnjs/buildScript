@@ -195,8 +195,8 @@ function build()
     webstatus="$(run git pull --rebase origin master)"
     if [ "$webstatus" = "Current branch master is up to date." ]; then
         msg="Cdnjs website repo is up to date"
-        $updateMeta || msg="$msg too, no need to rebuild.";
-        $updateMeta && msg="$msg, but we'll still rebuild artifacts since main repo has updates.";
+        $updateMeta || msg="$msg too, no need to deploy.";
+        $updateMeta && msg="$msg, but we'll still deploy artifacts since main repo has updates.";
         output Info "$msg" chat-room
     else
         updateRepo=true
