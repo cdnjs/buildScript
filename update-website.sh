@@ -148,6 +148,7 @@ function build()
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
     status="$(run git pull --rebase origin master)"
 
+    output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$status" = "Current branch master is up to date." ]; then
         msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
@@ -195,6 +196,7 @@ function build()
 
     output Info "Pull website repo with rebase from origin(Repo)"
     webstatus="$(run git pull --rebase origin master)"
+    output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$webstatus" = "Current branch master is up to date." ]; then
         msg="Cdnjs website repo is up to date"
         $updateMeta || msg="$msg too, no need to deploy.";
