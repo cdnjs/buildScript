@@ -173,6 +173,10 @@ function build()
         msg="Rebuild meta data phase 2"
         output Info "$msg" chat-room
         run cd "$basePath/$webRepo"
+        msg="Make sure npm package dependencies, do npm install & npm update"
+        output Info "$msg" chat-room
+        run npm install
+        run npm update
         run node update.js
 
         msg="Commit meta data update in website repo"
