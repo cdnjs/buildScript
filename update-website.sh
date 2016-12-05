@@ -28,7 +28,10 @@ function init()
 
     [[ "$logMode" = "clean" ]] && rm -f "$logPath/$logFile"
 
-    . "$pth/colorEcho/dist/ColorEcho.bash"
+    . "$pth/colorEcho/dist/ColorEcho.bash" &> /dev/null || {
+        git -C "$pth" submodule update --init
+        . "$pth/colorEcho/dist/ColorEcho.bash"
+    }
 }
 
 function setBasePath()
