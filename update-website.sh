@@ -36,12 +36,12 @@ function init()
 
 function setBasePath()
 {
-    echo "$(dirname $(realpath ${BASH_SOURCE[0]}))"
+    dirname "$(realpath "${BASH_SOURCE[0]}")"
 }
 
 function git-checkout-master-if-needed()
 {
-    currentBranch="`git branch | grep '^\*\ ' | awk '{print $2}'`"
+    currentBranch="$(git branch | grep '^\*\ ' | awk '{print $2}')"
     [[ "$currentBranch" = "master" ]] || run git checkout master
 }
 
@@ -75,7 +75,7 @@ function output()
     esac
     if [ ! -z "$3" ] && [ "$3" = "chat-room" ]; then
         curl --silent -d message="[cronjob] $2" "$gitterHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our gitter chatroom"
-        curl --silent -X POST --data-urlencode 'payload={"channel": "#'$slackChannel'", "username": "buildScript", "text": "'"$2"'", "icon_emoji": ":building_construction:"}' "$slackHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our Slack chatroom"
+        curl --silent -X POST --data-urlencode 'payload={"channel": "#'"$slackChannel"'", "username": "buildScript", "text": "'"$2"'", "icon_emoji": ":building_construction:"}' "$slackHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our Slack chatroom"
     fi
 }
 
@@ -98,16 +98,16 @@ function run()
     local isBuiltIn=false
     type "$1" &> /dev/null
     if [ $? -eq 0 ]; then
-        local temp="$(type $1 | head -n 1)"
+        local temp="$(type "$1" | head -n 1)"
         [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
     fi
 
     if [ "$isBuiltIn" = "false" ]; then
-        nice -n $nice timelimit -q -s 9 -t $((timeout - 2)) -T $timeout "$@"
+        nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@"
         local exitStatus="$?"
-        if [ $exitStatus -eq 137 ]; then
+        if [ "$exitStatus" -eq 137 ]; then
             error "Got timeout($timeout sec) while running command: '$@'"
-        elif [ $exitStatus -ne 0 ]; then
+        elif [ "$exitStatus" -ne 0 ]; then
             error "Got error while running command: '$@'"
         fi
     else
