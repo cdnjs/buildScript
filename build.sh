@@ -27,11 +27,15 @@ IssueContent="$($sed ':a;N;$!ba;s/\n/\\n/g' "$pth/issueTemplate")"
 
 Issue="{ \"title\": \"$IssueTitle\", \"body\": \"$IssueContent\", \"assignee\": \"$IssueAssignee\", \"labels\": $IssueLabels }"
 
-"$pth/update-website.sh" build
+flock -E 87 -n build.lock -c "$pth/update-website.sh build"
 
 error=$?
 
-[[ $error -ne 0 ]] && curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+if [ $error -eq 87 ]; then
+    echo -e "\nPrevious build locked!\n"
+elif [ $error -ne 0 ]; then
+    curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+fi
 
 EndTimestamp="$(date +%s)"
 
