@@ -149,7 +149,7 @@ function build()
     git-checkout-master-if-needed
 
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-    status="$(run git pull --rebase origin master)"
+    status="$(run git pull --rebase origin master | tail -n 1)"
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$status" = "Current branch master is up to date." ]; then
@@ -202,7 +202,7 @@ function build()
     git-checkout-master-if-needed
 
     output Info "Pull website repo with rebase from origin(Repo)"
-    webstatus="$(run git pull --rebase origin master)"
+    webstatus="$(run git pull --rebase origin master | tail -n 1)"
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$webstatus" = "Current branch master is up to date." ]; then
         msg="Cdnjs website repo is up to date"
