@@ -8,14 +8,14 @@ function init()
     updateMeta="$forceUpdateMeta"
     updateRepo="$forceUpdateRepo"
 
+    export PATH="$path:$PATH"
+
     NVM_DIR=$HOME/.nvm
     if [ -s "$NVM_DIR/nvm.sh" ]; then
         . "$NVM_DIR/nvm.sh"
         nvm install 4
         nvm use --delete-prefix v4
     fi
-
-    export PATH="$path:$PATH"
 
     if [[ ! $timeout =~ ^[0-9]+$ ]] || [[ $timeout -le 3 ]]; then
         timeout=3
