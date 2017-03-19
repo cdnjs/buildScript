@@ -167,7 +167,7 @@ function build()
         run npm test -- --silent
         msg="Reset and checkout website repository to meta branch"
         output Info "$msg"
-        run git -C "$basePath/$webRepo" reset --hard
+        (run cd "$basePath/$webRepo" && git-reset-hard-if-needed)
         run git -C "$basePath/$webRepo" checkout meta
         msg="Rebuild meta data phase 1"
         output Info "$msg" chat-room
