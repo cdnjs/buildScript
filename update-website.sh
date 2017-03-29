@@ -14,7 +14,6 @@ function init()
     if [ -s "$NVM_DIR/nvm.sh" ]; then
         . "$NVM_DIR/nvm.sh" --no-use
         nvm install 4
-        nvm use --delete-prefix v4
     fi
 
     if [[ ! $timeout =~ ^[0-9]+$ ]] || [[ $timeout -le 3 ]]; then
