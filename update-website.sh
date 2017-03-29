@@ -12,7 +12,7 @@ function init()
 
     NVM_DIR=$HOME/.nvm
     if [ -s "$NVM_DIR/nvm.sh" ]; then
-        . "$NVM_DIR/nvm.sh"
+        . "$NVM_DIR/nvm.sh" --no-use
         nvm install 4
         nvm use --delete-prefix v4
     fi
