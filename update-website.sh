@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+trap "exit 1" EXIT
+
 function init()
 {
     pth="$(setBasePath)"
