@@ -292,3 +292,5 @@ if [ "$1" = "build" ]; then
     init
     build
 fi
+
+trap - EXIT
