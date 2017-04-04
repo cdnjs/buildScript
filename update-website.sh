@@ -242,7 +242,7 @@ function build()
         output Info "$msg" chat-room
         for remote in heroku heroku2
         do
-            run git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
+            run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
         done
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
