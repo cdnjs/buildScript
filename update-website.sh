@@ -46,8 +46,7 @@ function git-checkout-master-if-needed()
 
 function git-reset-hard-if-needed()
 {
-    git diff --exit-code > /dev/null
-    if [ ! "$?" = "0" ]; then
+    if ! git diff --exit-code > /dev/null; then
         output Info "Repo diff found, so reset!"
         run git reset --hard
     else
@@ -105,8 +104,7 @@ function run()
     echo "$(date) [command] $@" >> "$logPath/$logFile"
 
     local isBuiltIn=false
-    type "$1" &> /dev/null
-    if [ $? -eq 0 ]; then
+    if type "$1" &> /dev/null; then
         local temp="$(type "$1" | head -n 1)"
         [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
     fi
