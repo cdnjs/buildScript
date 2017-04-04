@@ -94,7 +94,7 @@ function run_retry()
     local round
     round=1
     echo "$(date) [next command (round ${round})] $@" >> "$logPath/$logFile"
-    while [ ${round} -le ${retryTimes} ] && run "$@"; do
+    while [ ${round} -le ${retryTimes} ] && ! run "$@"; do
         round="$((round + 1))"
     done
 }
