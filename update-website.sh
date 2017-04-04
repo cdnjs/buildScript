@@ -247,6 +247,7 @@ function build()
             {
                 run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
             } &
+            sleep 1
         done
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
         wait
@@ -272,6 +273,7 @@ function build()
             {
                 run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
             } &
+            sleep 1
         done
         [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
         wait
