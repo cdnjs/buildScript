@@ -15,6 +15,7 @@ pushMetaOnGitHub=false
 
 timeout=1200     #maximun execution time for a command, in second
 nice=15
+retryTimes=3     #retry limit for run_retry()
 
 logFile='build.log'
 logMode='clean' #append|clean

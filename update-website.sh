@@ -91,6 +91,17 @@ function error()
     exit 1
 }
 
+function run_retry()
+{
+    set -x
+    local round
+    round=0
+    while [ ${round} -lt ${retryTimes} ] && run "$@"; do
+        round="$((round + 1))"
+    done
+    set +x
+}
+
 function run()
 {
     echo "$(date) [command] $@" >> "$logPath/$logFile"
