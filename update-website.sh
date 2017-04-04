@@ -244,9 +244,12 @@ function build()
         output Info "$msg" chat-room
         for remote in heroku heroku2
         do
-            run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
+            {
+                run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
+            } &
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
+        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
+        wait
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" chat-room
@@ -266,9 +269,12 @@ function build()
         output Info "$msg" chat-room
         for remote in heroku heroku2
         do
-            run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
+            {
+                run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
+            } &
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f
+        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
+        wait
     else
         msg="Didn't update anything, no need to push or deploy."
         output Info "$msg" chat-room
