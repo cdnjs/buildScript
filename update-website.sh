@@ -13,7 +13,7 @@ function init()
     NVM_DIR=$HOME/.nvm
     if [ -s "$NVM_DIR/nvm.sh" ]; then
         . "$NVM_DIR/nvm.sh" --no-use
-        nvm install 4 &
+        nvm install 4
     fi
 
     if [[ ! $timeout =~ ^[0-9]+$ ]] || [[ $timeout -le 3 ]]; then
@@ -31,7 +31,6 @@ function init()
         git -C "$pth" submodule update --init
         . "$pth/colorEcho/dist/ColorEcho.bash"
     }
-    wait
 }
 
 function setBasePath()
