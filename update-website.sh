@@ -122,10 +122,11 @@ function run_retry_times()
             error "'$@' command not found!"
         fi
 
-        if [ "$isBuiltIn" = "false" ] && ! nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@"; then
-            continue
+        if [ "$isBuiltIn" = "false" ]; then
+            nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@" || continue
+        else
+            "$@" || continue
         fi
-        "$@" || continue
         return
     done
     error "Got error while running command: '$@'"
