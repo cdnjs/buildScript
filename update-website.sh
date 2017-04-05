@@ -252,9 +252,7 @@ function build()
         output Info "$msg" chat-room
         for remote in heroku heroku2
         do
-            {
-                run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
-            } &
+            run_retry git push "$remote" meta:master -f &
             sleep 3
         done
         [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
@@ -278,9 +276,7 @@ function build()
         output Info "$msg" chat-room
         for remote in heroku heroku2
         do
-            {
-                run_retry git push "$remote" meta:master -f || error "Failed deployment on $remote ..."
-            } &
+            run_retry git push "$remote" meta:master -f &
             sleep 3
         done
         [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
