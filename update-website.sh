@@ -43,14 +43,14 @@ function setBasePath()
 function git-checkout-master-if-needed()
 {
     currentBranch="$(git branch | grep '^\*\ ' | awk '{print $2}')"
-    [[ "$currentBranch" = "master" ]] || run git checkout master
+    [[ "$currentBranch" = "master" ]] || run_retry git checkout master
 }
 
 function git-reset-hard-if-needed()
 {
     if ! git diff --exit-code > /dev/null; then
         output Info "Repo diff found, so reset!"
-        run git reset --hard
+        run_retry git reset --hard
     else
         output Info "Repo diff not found, so do not reset!"
     fi
@@ -91,37 +91,44 @@ function error()
     exit 1
 }
 
-function run_retry()
-{
-    local round
-    round=1
-    echo "$(date) [next command (round ${round})] $@" >> "$logPath/$logFile"
-    while [ ${round} -le ${retryTimes} ] && ! run "$@"; do
-        round="$((round + 1))"
-    done
-}
-
 function run()
 {
-    echo "$(date) [command] $@" >> "$logPath/$logFile"
+    run_retry_times 1 "$@"
+}
 
-    local isBuiltIn=false
-    if type "$1" &> /dev/null; then
-        local temp="$(type "$1" | head -n 1)"
-        [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
-    fi
+function run_retry()
+{
+    run_retry_times "${retryTimes}" "$@"
+}
 
-    if [ "$isBuiltIn" = "false" ]; then
-        nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@"
-        local exitStatus="$?"
-        if [ "$exitStatus" -eq 137 ]; then
-            error "Got timeout($timeout sec) while running command: '$@'"
-        elif [ "$exitStatus" -ne 0 ]; then
-            error "Got error while running command: '$@'"
+function run_retry_times()
+{
+    local timesLeft="${1}"
+    local timesLeftOrigin="${1}"
+    shift
+    while [ $timesLeft -ge 1 ]; do
+        timesLeft="$((timesLeft - 1))"
+        if [ $timesLeft -ge 1 ]; then
+            echo "$(date) [command (try time(s): $((timesLeftOrigin - timesLeft))/${timesLeftOrigin})] $@" >> "$logPath/$logFile"
+        else
+            echo "$(date) [command] $@" >> "$logPath/$logFile"
         fi
-    else
-        "$@" || error "Got error while running command: '$@'"
-    fi
+
+        local isBuiltIn=false
+        if type "$1" &> /dev/null; then
+            local temp="$(type "$1" | head -n 1)"
+            [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
+        else
+            error "'$@' command not found!"
+        fi
+
+        if [ "$isBuiltIn" = "false" ] && ! nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@"; then
+            continue
+        fi
+        "$@" || continue
+        return
+    done
+    error "Got error while running command: '$@'"
 }
 
 function build()
@@ -150,7 +157,7 @@ function build()
 
     if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
         output Success "Exist cdnjs local repo, fetch objects from local branch first"
-        run git fetch local
+        run_retry git fetch local
     else
         output Info "Local repo not found, will grab object(s) from GitHub"
     fi
@@ -158,7 +165,7 @@ function build()
     git-checkout-master-if-needed
 
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-    status="$(run git pull --tags --rebase origin master | tail -n 1)"
+    status="$(run_retry git pull --tags --rebase origin master | tail -n 1)"
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$status" = "Current branch master is up to date." ]; then
@@ -169,36 +176,36 @@ function build()
         output Info "$msg" chat-room
         msg="Make sure npm package dependencies, do npm install && npm update"
         output Info "$msg"
-        run npm install
-        run npm update
+        run_retry npm install
+        run_retry npm update
         msg="Run npm test before building the meta data/artifacts"
         output Info "$msg"
         run npm test -- --silent
         msg="Reset and checkout website repository to meta branch"
         output Info "$msg"
         (run cd "$basePath/$webRepo" && git-reset-hard-if-needed)
-        run git -C "$basePath/$webRepo" checkout meta
+        run_retry git -C "$basePath/$webRepo" checkout meta
         msg="Rebuild meta data phase 1"
         output Info "$msg" chat-room
-        run node build/packages.json.js
+        run_retry node build/packages.json.js
 
         msg="Rebuild meta data phase 2"
         output Info "$msg" chat-room
         run cd "$basePath/$webRepo"
         msg="Make sure npm package dependencies, do npm install & npm update"
         output Info "$msg" chat-room
-        run npm install
-        run npm update
-        run node update.js
+        run_retry npm install
+        run_retry npm update
+        run_retry node update.js
 
         msg="Commit meta data update in website repo"
         output Info "$msg" chat-room
         for file in atom.xml packages.min.json rss.xml sitemap.xml
         do
-            run git add public/$file
+            run_retry git add public/$file
         done
-        run git add sri
-        run git commit --message="meta data"
+        run_retry git add sri
+        run_retry git commit --message="meta data"
 
         updateMeta=true
     fi
@@ -211,7 +218,7 @@ function build()
     git-checkout-master-if-needed
 
     output Info "Pull website repo with rebase from origin(Repo)"
-    webstatus="$(run git pull --tags --rebase origin master | tail -n 1)"
+    webstatus="$(run_retry git pull --tags --rebase origin master | tail -n 1)"
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$webstatus" = "Current branch master is up to date." ]; then
         msg="Cdnjs website repo is up to date"
@@ -226,17 +233,17 @@ function build()
 
     if [ "$updateRepo" = true ]; then
         output Info "Update/Initial submodule under website repo" chat-room
-        run git submodule update --init
+        run_retry git submodule update --init
 
         msg="Make sure npm package dependencies, do npm install & npm update"
         output Info "$msg" chat-room
-        run npm install
-        run npm update
+        run_retry npm install
+        run_retry npm update
     fi
 
     msg="Rebase website's meta branch on master"
     output Info "$msg"
-    webstatus="$(run git rebase master meta)"
+    webstatus="$(run_retry git rebase master meta)"
     [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
 
     if [ "$updateMeta" = true ]; then
@@ -249,17 +256,17 @@ function build()
             } &
             sleep 3
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
+        [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
         wait
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" chat-room
-            run git checkout meta
+            run_retry git checkout meta
             export GITHUB_OAUTH_TOKEN="$githubToken"
             export ALGOLIA_API_KEY="$algoliaToken"
-            run node reindex.js
-            run git add GitHub.repos.meta.json
-            run git commit --amend --no-edit
+            run_retry node reindex.js
+            run_retry git add GitHub.repos.meta.json
+            run_retry git commit --amend --no-edit
             unset GITHUB_OAUTH_TOKEN
             unset ALGOLIA_API_KEY
         else
@@ -275,7 +282,7 @@ function build()
             } &
             sleep 3
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run git push origin meta -f &
+        [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
         wait
     else
         msg="Didn't update anything, no need to push or deploy."
