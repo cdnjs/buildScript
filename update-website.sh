@@ -42,7 +42,7 @@ function setBasePath()
 
 function git-checkout-master-if-needed()
 {
-    currentBranch="$(git branch | grep '^\*\ ' | awk '{print $2}')"
+    currentBranch="$(git branch | awk '{ if ("*" == $1) print $2}')"
     [[ "$currentBranch" = "master" ]] || run_retry git checkout master
 }
 
