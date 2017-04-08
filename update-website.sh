@@ -165,11 +165,16 @@ function build()
 
     git-checkout-master-if-needed
 
+    updated=false
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-    status="$(run_retry git pull --tags --rebase origin master | tail -n 1)"
+    run_retry git fetch origin master --tags
+    if [ "$(run git log --oneline -1 origin/master)" != "$(run git log --oneline -1 master)" ] ; then
+        run_retry git rebase origin/master master
+        updated=true
+    fi
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
-    if [ "$status" = "Current branch master is up to date." ] && [ "$updateMeta" = false ] ; then
+    if [ "$updated" = false ] && [ "$updateMeta" = false ] ; then
         msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
     else
