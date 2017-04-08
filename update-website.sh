@@ -169,7 +169,7 @@ function build()
     status="$(run_retry git pull --tags --rebase origin master | tail -n 1)"
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
-    if [ "$status" = "Current branch master is up to date." ]; then
+    if [ "$status" = "Current branch master is up to date." ] && [ "$updateMeta" = false ] ; then
         msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
     else
