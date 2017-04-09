@@ -265,7 +265,6 @@ function build()
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" chat-room
-            run_retry git checkout meta
             export GITHUB_OAUTH_TOKEN="$githubToken"
             export ALGOLIA_API_KEY="$algoliaToken"
             run_retry node reindex.js
