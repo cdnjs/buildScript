@@ -109,7 +109,8 @@ function run_retry_times()
     while [ $timesLeft -ge 1 ]; do
         timesLeft="$((timesLeft - 1))"
         if [ $((timesLeftOrigin - timesLeft)) -gt 1 ]; then
-            echo "$(date) [command (try time(s): $((timesLeftOrigin - timesLeft))/${timesLeftOrigin})] $@" >> "$logPath/$logFile"
+            sleep 3
+            echo "$(date) [command (try times: $((timesLeftOrigin - timesLeft))/${timesLeftOrigin})] $@" >> "$logPath/$logFile"
         else
             echo "$(date) [command] $@" >> "$logPath/$logFile"
         fi
