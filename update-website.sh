@@ -48,7 +48,7 @@ function git-checkout-master-if-needed()
 
 function git-reset-hard-if-needed()
 {
-    if ! git diff --exit-code > /dev/null; then
+    if ! git diff --quiet; then
         output Info "Repo diff found, so reset!"
         run_retry git reset --hard
     else
