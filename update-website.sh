@@ -262,7 +262,6 @@ function build()
             sleep 3
         done
         [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
-        wait
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" chat-room
@@ -276,6 +275,7 @@ function build()
         else
             error "Missing GitHub or algolia api key, cannot rebuild the searching index"
         fi
+        wait
     elif [ "$updateRepo" = true ]; then
         msg="Now push and deploy website and api"
         output Info "$msg" chat-room
