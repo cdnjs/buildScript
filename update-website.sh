@@ -227,7 +227,7 @@ function build()
     output Info "Pull website repo with rebase from origin(Repo)"
     webstatus="$(run_retry git pull --tags --rebase origin master | tail -n 1)"
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
-    if [ "$webstatus" = "Current branch master is up to date." ]; then
+    if [ "$webstatus" = "Current branch master is up to date." ] || [ "$webstatus" = "Already up-to-date." ]; then
         msg="Cdnjs website repo is up to date"
         $updateMeta || msg="$msg too, no need to deploy.";
         $updateMeta && msg="$msg, but we'll still deploy artifacts since main repo has updates.";
@@ -251,7 +251,9 @@ function build()
     msg="Rebase website's meta branch on master"
     output Info "$msg"
     webstatus="$(run_retry git rebase master meta)"
-    [[ "$webstatus" = "Current branch meta is up to date." ]] || updateRepo=true
+    if [[ "$webstatus" != "Current branch meta is up to date." ]] && [[ "$webstatus" != "Already up-to-date." ]]; then
+        updateRepo=true
+    fi
 
     if [ "$updateMeta" = true ]; then
         msg="Now push and deploy website & api"
