@@ -106,7 +106,7 @@ function run_retry_times()
     local timesLeft="${1}"
     local timesLeftOrigin="${1}"
     shift
-    while [ $timesLeft -ge 1 ]; do
+    while [ "$timesLeft" -ge 1 ]; do
         timesLeft="$((timesLeft - 1))"
         if [ $((timesLeftOrigin - timesLeft)) -gt 1 ]; then
             sleep 3
@@ -117,7 +117,8 @@ function run_retry_times()
 
         local isBuiltIn=false
         if type "$1" &> /dev/null; then
-            local temp="$(type "$1" | head -n 1)"
+            local temp
+            temp="$(type "$1" | head -n 1)"
             [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
         else
             error "'$@' command not found!"
