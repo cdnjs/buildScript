@@ -85,7 +85,7 @@ function error()
     if [ "$#" = "0" ]; then
         MSG="Error"
     else
-        MSG="$@";
+        MSG="$*";
     fi
     output Warn "$MSG, pwd='$(pwd)'" chat-room
     exit 1
@@ -93,12 +93,12 @@ function error()
 
 function run()
 {
-    run_retry_times 1 "$@"
+    run_retry_times 1 "$*"
 }
 
 function run_retry()
 {
-    run_retry_times "${retryTimes}" "$@"
+    run_retry_times "${retryTimes}" "$*"
 }
 
 function run_retry_times()
@@ -110,9 +110,9 @@ function run_retry_times()
         timesLeft="$((timesLeft - 1))"
         if [ $((timesLeftOrigin - timesLeft)) -gt 1 ]; then
             sleep 3
-            echo "$(date) [command (try times: $((timesLeftOrigin - timesLeft))/${timesLeftOrigin})] $@" >> "$logPath/$logFile"
+            echo "$(date) [command (try times: $((timesLeftOrigin - timesLeft))/${timesLeftOrigin})] $*" >> "$logPath/$logFile"
         else
-            echo "$(date) [command] $@" >> "$logPath/$logFile"
+            echo "$(date) [command] $*" >> "$logPath/$logFile"
         fi
 
         local isBuiltIn=false
@@ -121,17 +121,17 @@ function run_retry_times()
             temp="$(type "$1" | head -n 1)"
             [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
         else
-            error "'$@' command not found!"
+            error "'$*' command not found!"
         fi
 
         if [ "$isBuiltIn" = "false" ]; then
-            nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@" || continue
+            nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$*" || continue
         else
-            "$@" || continue
+            "$*" || continue
         fi
         return
     done
-    error "Got error while running command: '$@'"
+    error "Got error while running command: '$*'"
 }
 
 function build()
