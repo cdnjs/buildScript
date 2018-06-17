@@ -32,12 +32,12 @@ flock -E 87 -n build.lock -c "$pth/update-website.sh build"
 error=$?
 
 if [ $error -eq 87 ]; then
-    echo -e "\nPrevious build locked!\n"
+    echo -e "\\nPrevious build locked!\\n"
 elif [ $error -ne 0 ]; then
     curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
 fi
 
 EndTimestamp="$(date +%s)"
 
-echo -e "\nTotal time spent for this build is _$((EndTimestamp - StartTimestamp))_ second(s)\n"
+echo -e "\\nTotal time spent for this build is _$((EndTimestamp - StartTimestamp))_ second(s)\\n"
 exit $error
