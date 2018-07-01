@@ -22,7 +22,7 @@ function init() {
     fi
 
     eval logPath="$logPath"
-    if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ] ; then
+    if [ -z "$logPath" ] || [ ! -d "$logPath" ] || [ ! -w "$logPath" ]; then
         logPath="$pth"
     fi
 
@@ -162,13 +162,13 @@ function build() {
     updated=false
     output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
     run_retry git fetch origin master --tags
-    if [ "$(run git log --oneline -1 origin/master)" != "$(run git log --oneline -1 master)" ] ; then
+    if [ "$(run git log --oneline -1 origin/master)" != "$(run git log --oneline -1 master)" ]; then
         run_retry git rebase origin/master master
         updated=true
     fi
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
-    if [ "$updated" = false ] && [ "$updateMeta" = false ] ; then
+    if [ "$updated" = false ] && [ "$updateMeta" = false ]; then
         msg="Cdnjs main repo is up to date, no need to rebuild";
         output Info "$msg" chat-room
     else
