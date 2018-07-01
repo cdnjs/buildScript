@@ -116,10 +116,12 @@ function run_retry_times()
         fi
 
         local isBuiltIn=false
-        if type "$1" &> /dev/null; then
+        local cmd
+        cmd="$(echo "$1" | awk '{print $1}' )"
+        if type "$cmd" &> /dev/null; then
             local temp
-            temp="$(type "$1" | head -n 1)"
-            [[ "$temp" = "$1 is a shell builtin" ]] && isBuiltIn=true
+            temp="$(type "$cmd" | head -n 1)"
+            [[ "$temp" = "$cmd is a shell builtin" ]] && isBuiltIn=true
         else
             error "'$*' command not found!"
         fi
