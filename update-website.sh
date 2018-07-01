@@ -26,7 +26,7 @@ function init() {
         logPath="$pth"
     fi
 
-    [[ "$logMode" = "clean" ]] && rm -f "$logPath/$logFile"
+    [ "$logMode" = "clean" ] && rm -f "$logPath/$logFile"
 
     . "$pth/colorEcho/dist/ColorEcho.bash" &> /dev/null || {
         git -C "$pth" submodule update --init
@@ -40,7 +40,7 @@ function setBasePath() {
 
 function git-checkout-master-if-needed() {
     currentBranch="$(git branch | awk '{ if ("*" == $1) print $2}')"
-    [[ "$currentBranch" = "master" ]] || run_retry git checkout master
+    [ "$currentBranch" = "master" ] || run_retry git checkout master
 }
 
 function git-reset-hard-if-needed() {
@@ -112,7 +112,7 @@ function run_retry_times() {
         if type "$cmd" &> /dev/null; then
             local temp
             temp="$(type "$cmd" | head -n 1)"
-            [[ "$temp" = "$cmd is a shell builtin" ]] && isBuiltIn=true
+            [ "$temp" = "$cmd is a shell builtin" ] && isBuiltIn=true
         else
             error "'$*' command not found!"
         fi
@@ -254,7 +254,7 @@ function build() {
             run_retry git push "$remote" meta:master -f &
             sleep 3
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
+        [ "$pushMetaOnGitHub" = true ] && run_retry git push origin meta -f &
         if [ ! -z "$githubToken" ] && [ ! -z "$algoliaToken" ]; then
             msg="Now rebuild algolia search index"
             output Info "$msg" chat-room
@@ -276,7 +276,7 @@ function build() {
             run_retry git push "$remote" meta:master -f &
             sleep 3
         done
-        [[ "$pushMetaOnGitHub" = true ]] && run_retry git push origin meta -f &
+        [ "$pushMetaOnGitHub" = true ] && run_retry git push origin meta -f &
         wait
     else
         msg="Didn't update anything, no need to push or deploy."
