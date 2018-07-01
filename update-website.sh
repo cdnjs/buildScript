@@ -200,8 +200,7 @@ function build() {
 
         msg="Commit meta data update in website repo"
         output Info "$msg" chat-room
-        for file in atom.xml packages.min.json rss.xml sitemap.xml
-        do
+        for file in atom.xml packages.min.json rss.xml sitemap.xml; do
             run_retry git add public/$file
         done
         run_retry git add sri
@@ -251,8 +250,7 @@ function build() {
     if [ "$updateMeta" = true ]; then
         msg="Now push and deploy website & api"
         output Info "$msg" chat-room
-        for remote in heroku heroku2
-        do
+        for remote in heroku heroku2; do
             run_retry git push "$remote" meta:master -f &
             sleep 3
         done
@@ -274,8 +272,7 @@ function build() {
     elif [ "$updateRepo" = true ]; then
         msg="Now push and deploy website and api"
         output Info "$msg" chat-room
-        for remote in heroku heroku2
-        do
+        for remote in heroku heroku2; do
             run_retry git push "$remote" meta:master -f &
             sleep 3
         done
