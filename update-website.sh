@@ -2,8 +2,7 @@
 
 trap "exit 1" EXIT
 
-function init()
-{
+function init() {
     pth="$(setBasePath)"
     . "$pth/config.sh"
 
@@ -35,19 +34,16 @@ function init()
     }
 }
 
-function setBasePath()
-{
+function setBasePath() {
     dirname "$(realpath "${BASH_SOURCE[0]}")"
 }
 
-function git-checkout-master-if-needed()
-{
+function git-checkout-master-if-needed() {
     currentBranch="$(git branch | awk '{ if ("*" == $1) print $2}')"
     [[ "$currentBranch" = "master" ]] || run_retry git checkout master
 }
 
-function git-reset-hard-if-needed()
-{
+function git-reset-hard-if-needed() {
     if ! git diff --quiet; then
         output Info "Repo diff found, so reset!"
         run_retry git reset --hard
@@ -56,8 +52,7 @@ function git-reset-hard-if-needed()
     fi
 }
 
-function output()
-{
+function output() {
     echo "$(date) [$1] $2" >> "$logPath/$logFile"
     case "$1" in
         "Warn" )
@@ -79,8 +74,7 @@ function output()
     fi
 }
 
-function error()
-{
+function error() {
     local MSG
     if [ "$#" = "0" ]; then
         MSG="Error"
@@ -91,18 +85,15 @@ function error()
     exit 1
 }
 
-function run()
-{
+function run() {
     run_retry_times 1 "$*"
 }
 
-function run_retry()
-{
+function run_retry() {
     run_retry_times "${retryTimes}" "$*"
 }
 
-function run_retry_times()
-{
+function run_retry_times() {
     local timesLeft="${1}"
     local timesLeftOrigin="${1}"
     shift
@@ -136,8 +127,7 @@ function run_retry_times()
     error "Got error while running command: '$*'"
 }
 
-function build()
-{
+function build() {
 
     [[ -d "$basePath/$mainRepo" ]] || error "Main repo  '$basePath/$mainRepo' not found, exit now."
 
