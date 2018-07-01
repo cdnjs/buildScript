@@ -86,11 +86,11 @@ function error() {
 }
 
 function run() {
-    run_retry_times 1 "$*"
+    run_retry_times 1 "$@"
 }
 
 function run_retry() {
-    run_retry_times "${retryTimes}" "$*"
+    run_retry_times "${retryTimes}" "$@"
 }
 
 function run_retry_times() {
@@ -114,13 +114,13 @@ function run_retry_times() {
             temp="$(type "$cmd" | head -n 1)"
             [ "$temp" = "$cmd is a shell builtin" ] && isBuiltIn=true
         else
-            error "'$*' command not found!"
+            error "'$cmd' command not found!"
         fi
 
         if [ "$isBuiltIn" = "false" ]; then
-            nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$*" || continue
+            nice -n "$nice" timelimit -q -s 9 -t $((timeout - 2)) -T "$timeout" "$@" || continue
         else
-            "$*" || continue
+            "$@" || continue
         fi
         return
     done
