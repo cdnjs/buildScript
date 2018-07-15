@@ -55,18 +55,18 @@ function git-reset-hard-if-needed() {
 function output() {
     echo "$(date) [$1] $2" >> "$logPath/$logFile"
     case "$1" in
-        "Warn" )
+        "Warn")
             echo.Red "$2"
-        ;;
-        "Success" )
+            ;;
+        "Success")
             echo.Green "$2"
-        ;;
-        "Info" )
+            ;;
+        "Info")
             echo.Cyan "$2"
-        ;;
+            ;;
         *)
             echo "$1"
-        ;;
+            ;;
     esac
     if [ ! -z "$3" ] && [ "$3" = "chat-room" ]; then
         curl --silent -d message="[cronjob] $2" "$gitterHook" > /dev/null || output Warn "Error on curl!!! Message may not be posted on our gitter chatroom"
@@ -79,7 +79,7 @@ function error() {
     if [ "$#" = "0" ]; then
         MSG="Error"
     else
-        MSG="$*";
+        MSG="$*"
     fi
     output Warn "$MSG, pwd='$(pwd)'" chat-room
     exit 1
@@ -108,7 +108,7 @@ function run_retry_times() {
 
         local isBuiltIn=false
         local cmd
-        cmd="$(echo "$1" | awk '{print $1}' )"
+        cmd="$(echo "$1" | awk '{print $1}')"
         if type "$cmd" &> /dev/null; then
             local temp
             temp="$(type "$cmd" | head -n 1)"
@@ -169,7 +169,7 @@ function build() {
 
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$updated" = false ] && [ "$updateMeta" = false ]; then
-        msg="Cdnjs main repo is up to date, no need to rebuild";
+        msg="Cdnjs main repo is up to date, no need to rebuild"
         output Info "$msg" chat-room
     else
         msg="Cdnjs main repo updates found! Start the rebuild rebuild process"
@@ -221,8 +221,8 @@ function build() {
     output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
     if [ "$webstatus" = "Current branch master is up to date." ] || [ "$webstatus" = "Already up-to-date." ]; then
         msg="Cdnjs website repo is up to date"
-        $updateMeta || msg="$msg too, no need to deploy.";
-        $updateMeta && msg="$msg, but we'll still deploy artifacts since main repo has updates.";
+        $updateMeta || msg="$msg too, no need to deploy."
+        $updateMeta && msg="$msg, but we'll still deploy artifacts since main repo has updates."
         output Info "$msg" chat-room
     else
         msg="Cdnjs website repo updates found!"
