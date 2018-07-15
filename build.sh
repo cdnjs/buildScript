@@ -13,9 +13,9 @@ cat "$pth/banner"
 export PATH="$path:$PATH"
 
 if [ "$(uname)" = "FreeBSD" ] || [ "$(uname)" = "Darwin" ]; then
-    sed="gsed"
+  sed="gsed"
 else
-    sed="sed"
+  sed="sed"
 fi
 
 apiUrl='https://api.github.com/repos/cdnjs/cdnjs/issues'
@@ -32,9 +32,9 @@ flock -E 87 -n build.lock -c "$pth/update-website.sh build"
 error=$?
 
 if [ $error -eq 87 ]; then
-    echo -e "\\nPrevious build locked!\\n"
+  echo -e "\\nPrevious build locked!\\n"
 elif [ $error -ne 0 ]; then
-    curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
+  curl --silent -H "Authorization: token $githubToken" -d "$Issue" "$apiUrl" > /dev/null
 fi
 
 EndTimestamp="$(date +%s)"
