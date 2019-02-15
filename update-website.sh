@@ -176,7 +176,7 @@ function build() {
     output Info "$msg" chat-room
     msg="Make sure npm package dependencies, do npm install && npm update"
     output Info "$msg"
-    run_retry npm install --no-save
+    run_retry npm install --no-audit --no-save
     run_retry npm update --no-save
     msg="Run npm test before building the meta data/artifacts"
     output Info "$msg"
@@ -194,7 +194,7 @@ function build() {
     run cd "$basePath/$webRepo"
     msg="Make sure npm package dependencies, do npm install & npm update"
     output Info "$msg" chat-room
-    run_retry npm install --no-save
+    run_retry npm install --no-audit --no-save
     run_retry npm update --no-save
     run_retry node update.js
 
@@ -236,7 +236,7 @@ function build() {
 
     msg="Make sure npm package dependencies, do npm install & npm update"
     output Info "$msg" chat-room
-    run_retry npm install --no-save
+    run_retry npm install --no-audit --no-save
     run_retry npm update --no-save
   fi
 
