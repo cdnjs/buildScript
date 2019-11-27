@@ -44,12 +44,14 @@ function git-checkout-master-if-needed() {
 }
 
 function git-reset-hard-if-needed() {
-  if ! git diff --quiet; then
-    output Info "Repo diff found, so reset!"
-    run_retry git reset --hard
-  else
-    output Info "Repo diff not found, so do not reset!"
-  fi
+  # the bot already keeps the cdnjs repo up-to-date
+  echo ignore
+  # if ! git diff --quiet; then
+  #   output Info "Repo diff found, so reset!"
+  #   run_retry git reset --hard
+  # else
+  #   output Info "Repo diff not found, so do not reset!"
+  # fi
 }
 
 function output() {
@@ -152,21 +154,21 @@ function build() {
 
   if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     output Success "Exist cdnjs local repo, fetch objects from local branch first"
-    # TODO: cdnjs repo is already kept up-to-date by the bot
-    #run_retry git fetch local
+    run_retry git fetch local
   else
     output Info "Local repo not found, will grab object(s) from GitHub"
   fi
 
   git-checkout-master-if-needed
 
-  updated=false
-  output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
-  run_retry git fetch origin master --tags
-  if [ "$(run git log --oneline -1 origin/master)" != "$(run git log --oneline -1 master)" ]; then
-    run_retry git rebase origin/master master
-    updated=true
-  fi
+  updated=true
+  # updated=false
+  # output Info "Pull cdnjs main repo with rebase from origin(GitHub)"
+  # run_retry git fetch origin master --tags
+  # if [ "$(run git log --oneline -1 origin/master)" != "$(run git log --oneline -1 master)" ]; then
+  #   run_retry git rebase origin/master master
+  #   updated=true
+  # fi
 
   output Info "Current commit: $(run git log --pretty='format:%h - %s - %an %ai' -1)"
   if [ "$updated" = false ] && [ "$updateMeta" = false ]; then
