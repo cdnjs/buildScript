@@ -1,10 +1,15 @@
+if [ -z "$BOT_BASE_PATH" ]; then
+  echo "BOT_BASE_PATH missing"
+  exit 1
+fi
+
 githubToken=""
 algoliaToken=""
 gitterHook=""
 slackHook=""
 slackChannel="build-server-logs"
 
-basePath="../"
+basePath="$BOT_BASE_PATH"
 mainRepo="cdnjs"
 webRepo="new-website"
 hasLocalRepo=true
