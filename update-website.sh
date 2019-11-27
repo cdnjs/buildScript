@@ -152,7 +152,8 @@ function build() {
 
   if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
     output Success "Exist cdnjs local repo, fetch objects from local branch first"
-    run_retry git fetch local
+    # TODO: cdnjs repo is already kept up-to-date by the bot
+    #run_retry git fetch local
   else
     output Info "Local repo not found, will grab object(s) from GitHub"
   fi
@@ -250,7 +251,7 @@ function build() {
   if [ "$updateMeta" = true ]; then
     msg="Now push and deploy website & api"
     output Info "$msg" chat-room
-    for remote in heroku heroku2; do
+    for remote in heroku; do
       run_retry git push "$remote" meta:master -f &
       sleep 3
     done
@@ -272,7 +273,7 @@ function build() {
   elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website and api"
     output Info "$msg" chat-room
-    for remote in heroku heroku2; do
+    for remote in heroku; do
       run_retry git push "$remote" meta:master -f &
       sleep 3
     done

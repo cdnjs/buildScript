@@ -4,8 +4,8 @@ gitterHook=""
 slackHook=""
 slackChannel="build-server-logs"
 
-basePath="/home/user/cdnjs"
-mainRepo="cdnjsmaster"
+basePath="../"
+mainRepo="cdnjs"
 webRepo="new-website"
 hasLocalRepo=true
 forceUpdateMeta=false
@@ -22,4 +22,4 @@ logMode='clean' #append|clean
 logPath=''      #if empty, log will be placed at the root of buildScript
 
 path="/usr/local/bin:/usr/bin:/bin"
-serverOwner="PeterDaveHello"
+serverOwner="robocdnjs"

@@ -21,7 +21,7 @@ fi
 apiUrl='https://api.github.com/repos/cdnjs/cdnjs/issues'
 
 IssueTitle="[Build failed] Got error while building meta data/artifact"
-IssueAssignee="PeterDaveHello"
+IssueAssignee="robocdnjs"
 IssueLabels='["Bug - High Priority"]'
 IssueContent="$($sed ':a;N;$!ba;s/\n/\\n/g' "$pth/issueTemplate")"
 
