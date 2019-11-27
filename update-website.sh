@@ -152,12 +152,12 @@ function build() {
   run cd "$basePath/$mainRepo"
   git-reset-hard-if-needed
 
-  if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
-    output Success "Exist cdnjs local repo, fetch objects from local branch first"
-    run_retry git fetch local
-  else
-    output Info "Local repo not found, will grab object(s) from GitHub"
-  fi
+  # if [ "$hasLocalRepo" = true ] && [ -d "$basePath" ]; then
+  #   output Success "Exist cdnjs local repo, fetch objects from local branch first"
+  #   run_retry git fetch local
+  # else
+  #   output Info "Local repo not found, will grab object(s) from GitHub"
+  # fi
 
   git-checkout-master-if-needed
 
