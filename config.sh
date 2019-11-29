@@ -2,9 +2,13 @@ if [ -z "$BOT_BASE_PATH" ]; then
   echo "BOT_BASE_PATH missing"
   exit 1
 fi
+if [ -z "$ALGOLIA_WRITE_API_KEY" ]; then
+  echo "ALGOLIA_WRITE_API_KEY missing"
+  exit 1
+fi
 
 githubToken=""
-algoliaToken=""
+algoliaToken="$ALGOLIA_WRITE_API_KEY"
 gitterHook=""
 slackHook=""
 slackChannel="build-server-logs"
