@@ -253,7 +253,7 @@ function build() {
   if [ "$updateMeta" = true ]; then
     msg="Now push and deploy website & api"
     output Info "$msg" chat-room
-    for remote in heroku; do
+    for remote in heroku-web heroku-api; do
       run_retry git push "$remote" meta:master -f &
       sleep 3
     done
@@ -275,7 +275,7 @@ function build() {
   elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website and api"
     output Info "$msg" chat-room
-    for remote in heroku; do
+    for remote in heroku-web heroku-api; do
       run_retry git push "$remote" meta:master -f &
       sleep 3
     done
