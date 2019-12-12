@@ -262,19 +262,6 @@ function build() {
       sleep 3
     done
     [ "$pushMetaOnGitHub" = true ] && run_retry git push origin meta -f &
-    if [ -n "$githubToken" ] && [ -n "$algoliaToken" ]; then
-      msg="Now rebuild algolia search index"
-      output Info "$msg" chat-room
-      export GITHUB_OAUTH_TOKEN="$githubToken"
-      export ALGOLIA_API_KEY="$algoliaToken"
-      run_retry node reindex.js
-      run_retry git add GitHub.repos.meta.json
-      run_retry git commit --amend --no-edit
-      unset GITHUB_OAUTH_TOKEN
-      unset ALGOLIA_API_KEY
-    else
-      error "Missing GitHub or algolia api key, cannot rebuild the searching index"
-    fi
     wait
   elif [ "$updateRepo" = true ]; then
     msg="Now push and deploy website and api"
