@@ -201,9 +201,13 @@ function build() {
     run_retry npm update --no-save
     run_retry node update.js
 
+    msg="Upload packages.min.json to Google storage"
+    output Info "$msg"
+    run_retry packages set < public/packages.min.json
+
     msg="Commit meta data update in website repo"
     output Info "$msg" chat-room
-    for file in atom.xml packages.min.json rss.xml sitemap.xml; do
+    for file in atom.xml rss.xml sitemap.xml; do
       run_retry git add public/$file
     done
     run_retry git add sri
