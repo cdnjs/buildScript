@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Sciprt for cronjob, will open an issue on cdnjs/cdnjs if build failed.
+# Script for cronjob, will open an issue on cdnjs/cdnjs if build failed.
 
 StartTimestamp="$(date +%s)"
 
